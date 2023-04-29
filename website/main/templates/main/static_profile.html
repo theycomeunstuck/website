@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1285">
+  <title>Профиль</title>
+     {% load static %}
+	<link rel="stylesheet" href=" {% static 'website/css/style_profile.css' %}">
+     <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
+     <link href="https://fonts.googleapis.com/css?family=Port+Lligat Sans&display=swap" rel="stylesheet">
+ </head>
+ <body>
+     <div class="background"></div>
+     <div class="container">
+         <div class="top_whitebar"></div>
+            <span class="eportfoliotext">Электронное портфолио</span>
+
+     <div class="profile_background"></div>
+    <span class="span_profile">Профиль</span>
+     <span class="label_name">Имя</span>
+     <span class="input_name" name="name">{{value_name}}</span>
+<!--     <div class="button_add_achievement">Добавить достижение</div>-->
+     <a class="" name="surname">{{value_surname}} </a>
+               <a type="label" name="class">{{value_class}}</a>
+               <a type="label" name="letter"> {{value_letter}}</a>
+               <a type="label" name="countAchievements"> {{value_countAchievements}}</a>
+               <form method="POST"> {% csrf_token %}
+               <button text="Добавить достижение" href="{% url 'add' %}" name="button_add_achievement"></button>
+               <div><button text="lsit достижение" href="{% url 'list' %}" name="button_list_achievements"></button></div>
+               <div><button text="make достижение" href="{% url 'make' %}" name="button_make_report"></button></div></form>
+               </div>
+     </div>
+     </div>
+
+
+<script>
+    function RedirectAddAchievement() {
+        alert("Button is pressed")
+    }
+</script>
+
+ </body>
+</html>
