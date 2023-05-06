@@ -1,0 +1,243 @@
+.e1_4 {
+	background-color:rgba(226.31249696016312, 226.31249696016312, 226.31249696016312, 1);
+	width:1440px;
+	height:1024px;
+	position:absolute;
+	overflow:hidden;
+}
+.e128_137 { 
+	width:1360px;
+	height:753px;
+	position:absolute;
+	left:40px;
+	top:190px;
+}
+.e4_39 { 
+	background-color:rgba(255, 255, 255, 0.8999999761581421);
+	width:1360px;
+	height:753px;
+	position:absolute;
+	left:0px;
+	top:0px;
+}
+.achievement_count {
+	background-color:rgba(217.0000022649765, 217.0000022649765, 217.0000022649765, 0.5);
+	width:317.5097351074219px;
+	height:30px;
+	position:absolute;
+	left:42.33460998535156px;
+	top:586px;
+}
+.achievement_count2 {
+	padding-left: 4%;
+	padding-top: 2%;
+}
+.e102_15 { 
+	color:rgba(0, 0, 0, 1);
+	width:304.809326171875px;
+	height:36px;
+	position:absolute;
+	left:42.33460998535156px;
+	top:540px;
+	font-family:Port Lligat Sans;
+	text-align:left;
+	font-size:24px;
+	letter-spacing:0;
+}
+.class_letter {
+	background-color:rgba(217.0000022649765, 217.0000022649765, 217.0000022649765, 0.5);
+	width:317.5097351074219px;
+	height:30px;
+	position:absolute;
+	left:42.33460998535156px;
+	top:478px;
+}
+.class_letter2 {
+	padding-left: 4%;
+	padding-top: 2%;
+}
+.e102_3 { 
+	color:rgba(0, 0, 0, 1);
+	width:70.91050720214844px;
+	height:26px;
+	position:absolute;
+	left:42.33460998535156px;
+	top:438px;
+	font-family:Port Lligat Sans;
+	text-align:left;
+	font-size:24px;
+	letter-spacing:0;
+}
+.student_surname {
+	background-color:rgba(217.0000022649765, 217.0000022649765, 217.0000022649765, 0.5);
+	width:317.5097351074219px;
+	height:30px;
+	position:absolute;
+	left:42.33460998535156px;
+	top:282px;
+
+}
+.student_surname2 {
+	padding-left: 4%;
+	padding-top: 2%;
+}
+.number_class {
+	background-color:rgba(217.0000022649765, 217.0000022649765, 217.0000022649765, 0.5);
+	width:317.5097351074219px;
+	height:30px;
+	position:absolute;
+	left:42.33460998535156px;
+	top:380px;
+}
+.number_class2 {
+	padding-left: 4%;
+	padding-top: 2%;
+}
+.e4_60 { 
+	color:rgba(0, 0, 0, 1);
+	width:60.326847076416016px;
+	height:29px;
+	position:absolute;
+	left:42.33460998535156px;
+	top:136px;
+	font-family:Port Lligat Sans;
+	text-align:left;
+	font-size:24px;
+	letter-spacing:0;
+}
+.e4_61 { 
+	color:rgba(0, 0, 0, 1);
+	width:115.36186981201172px;
+	height:26px;
+	position:absolute;
+	left:42.33460998535156px;
+	top:242px;
+	font-family:Port Lligat Sans;
+	text-align:left;
+	font-size:24px;
+	letter-spacing:0;
+}
+.e4_62 { 
+	color:rgba(0, 0, 0, 1);
+	width:69.85214233398438px;
+	height:52px;
+	position:absolute;
+	left:42.33460998535156px;
+	top:342px;
+	font-family:Port Lligat Sans;
+	text-align:left;
+	font-size:24px;
+	letter-spacing:0;
+}
+.e4_59 { 
+	color:rgba(0, 0, 0, 1);
+	width:208.498046875px;
+	height:39px;
+	position:absolute;
+	left:42px;
+	top:21px;
+	font-family:Port Lligat Sans;
+	text-align:left;
+	font-size:40px;
+	letter-spacing:0;
+}
+.student_name {
+	background-color:rgba(217.0000022649765, 217.0000022649765, 217.0000022649765, 0.5);
+	width:317.5097351074219px;
+	height:30px;
+	position:absolute;
+	left:43.392974853515625px;
+	top:185px;
+}
+.student_name2 {
+	padding-left: 4%;
+	padding-top: 2%;
+}
+.button_add_achievement {
+	background-color:rgba(217.0000022649765, 217.0000022649765, 217.0000022649765, 0.699999988079071);
+	width:550.3502197265625px;
+	height:120px;
+	position:absolute;
+	left:755px;
+	top:136px;
+	color:rgba(0, 0, 0, 1);
+	/*width:143.937744140625px;*/
+	/*height:34px;*/
+	/*position:absolute;*/
+	/*left:958.2062377929688px;*/
+	/*top:179px;*/
+	font-family:Port Lligat Sans;
+	text-align:center;
+	font-size:32px;
+	letter-spacing:0;
+}
+.button_list_achievements {
+	background-color:rgba(217.0000022649765, 217.0000022649765, 217.0000022649765, 0.699999988079071);
+	width:550.3502197265625px;
+	height:120px;
+	position:absolute;
+	left:755px;
+	top:282px;
+	color:rgba(0, 0, 0, 1);
+	position:absolute;
+	font-family:Port Lligat Sans;
+	text-align:center;
+	font-size:32px;
+	letter-spacing:0;
+}
+.button_make_report {
+	background-color:rgba(217.0000022649765, 217.0000022649765, 217.0000022649765, 0.699999988079071);
+	width:550.3502197265625px;
+	height:120px;
+	position:absolute;
+	left:755px;
+	top:428px;
+	color:rgba(0, 0, 0, 1);
+	position:absolute;
+	font-family:Port Lligat Sans;
+	text-align:center;
+	font-size:32px;
+	letter-spacing:0;
+}
+.e128_136 { 
+	width:1440px;
+	height:90px;
+	position:absolute;
+	left:0px;
+	top:0px;
+}
+.e2_6 { 
+	background-color:rgba(255, 255, 255, 0.8999999761581421);
+	width:1440px;
+	height:90px;
+	position:absolute;
+	left:0px;
+	top:0px;
+}
+.e2_7 { 
+	color:rgba(0, 0, 0, 1);
+	width:390px;
+	height:46px;
+	position:absolute;
+	left:40px;
+	top:24px;
+	font-family:Oswald;
+	text-align:left;
+	font-size:30px;
+	letter-spacing:0;
+}
+.e4_25 { 
+	width:109.99999237060547px;
+	height:36px;
+	position:absolute;
+	left:1290px;
+	top:29px;
+}
+.quit {
+	/*background-color:rgba(0, 0, 0, 1);*/
+	width:36px;
+	height:31.5px;
+	position:absolute;
+	left:1350px;
+	top:2.25px;
+}

@@ -56,12 +56,8 @@ class LoginUserForm():
         except Exception as e:
             print(e)
 
-
     def fill_fields(self, localId):
         student = db.child('users').child(localId).child('profile').get(0)
+
         data = student.val()
-        return data['name'], data['surname'], data['letter'], data['class'],  data['countAchievements']
-
-
-
-
+        return data['name'], data['surname'], data['letter'], data['class'], data['countAchievements']

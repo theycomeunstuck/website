@@ -10,6 +10,7 @@ urlpatterns = [
     path('add_achievement', add_achievements, name='add'),
     path('list_achievements', list_achievements, name='list'),
     path('make_achievement', make_report, name='make'),
+    path('logout', logout, name='logout')
     # path('postsignin', postsignin)
     # path('account')
 ]

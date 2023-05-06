@@ -72,12 +72,15 @@ def profile(request):
         localId = request.COOKIES['user_localId']
         idToken = request.COOKIES['user_idToken']
 
-        fields = LoginUserForm().fill_fields(localId)
-        data['value_name'] = fields[0]
-        data['value_surname'] = fields[1]
-        data['value_letter'] = fields[2]
-        data['value_class'] = fields[3]
-        data['value_countAchievements'] = fields[4]
+        # fields = LoginUserForm().fill_fields(localId)
+        data['value_name'], data['value_surname'], data['value_letter'], data['value_class'], data[
+            'value_countAchievements'] = LoginUserForm().fill_fields(localId)
+        print("76 data\n", data)
+        # data['value_name'] = fields[0]
+        # data['value_surname'] = fields[1]
+        # data['value_letter'] = fields[2]
+        # data['value_class'] = fields[3]
+        # data['value_countAchievements'] = fields[4]
     else:
         profile_buttons(request, name_button)
 
@@ -107,5 +110,9 @@ def list_achievements(request):
 
 def make_report(request):
     print('make_report')
+
+
+def logout(request):
+    print("надо выйти бро")
 
 # !profile page end!

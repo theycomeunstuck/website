@@ -1,68 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="utf-8">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Профиль</title>
-    <link href="https://fonts.googleapis.com/css?family=Port+Lligat Sans&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Oswald&display=swap" rel="stylesheet">
     {% load static %}
-    <link rel="stylesheet" href=" {% static 'website/css/style_profile.css' %}">
-
-    <style>
-        body {
-            background: #E5E5E5;
-        }
-    </style>
-
+    <link rel="stylesheet" href="{% static 'website/css/style_profile.css' %}">
 </head>
-
 <body>
-<div class=e1_4>
-    <div class=e128_137>
-        <div class="e4_39"></div>
-        <span class="e102_15">Количество достижений</span>
-        <span class="e102_3">Буква</span>
-        <span class="e4_60">Имя</span>
-        <span class="e4_61">Фамилия</span>
-        <span class="e4_62">Класс</span>
-        <span class="e4_59">Профиль</span>
+<div class="sidebar">
+    <h1>Электронное портфолио</h1>
+    <ul>
+        <li><a href="#">Профиль</a></li>
+        <li><a href="#">Выход</a></li>
+    </ul>
+</div>
+<div class="content">
+    <h2>Профиль</h2>
+    <div class="profile">
+        <form>
+            <label for="name">Имя:</label>
+            <input type="text" id="name" name="name" value="{{ name }}" readonly>
 
-        <div class="class_letter">
-            <div class="class_letter2">{{value_letter}}</div>
-        </div>
-        <div class="achievement_count">
-            <div class="achievement_count2">{{value_countAchievements}}</div>
-        </div>
-        <div class="number_class">
-            <div class="number_class2"> {{value_class}}</div>
-        </div>
-        <div class="student_name">
-            <div class="student_name2"> {{value_name}}</div>
-        </div>
-        <div class="student_surname">
-            <div class="student_surname2"> {{value_surname}}</div>
-        </div>
+            <label for="surname">Фамилия:</label>
+            <input type="text" id="surname" name="surname" value="{{ surname }}" readonly>
 
-        <div class="e104_17"></div>
-        <form method="POST"> {% csrf_token %}
-            <button class="button_add_achievement" href="{% url 'add' %}" name="button_add_achievement">Добавить
-                достижение
-            </button>
-            <button class="button_list_achievements" href="{% url 'list' %}" name="button_list_achievements">Посмотреть
-                достижения
-            </button>
-            <button class="button_make_report" href="{% url 'make' %}" name="button_make_report">Сформировать отчёт
-            </button>
+            <label for="class">Класс:</label>
+            <input type="text" id="class" name="class" value="{{ class }}" readonly>
+
+            <label for="letter">Буква:</label>
+            <input type="text" id="letter" name="letter" value="{{ letter }}" readonly>
+
+            <label for="achievements">Количество достижений:</label>
+            <input type="text" id="achievements" name="achievements" value="{{ achievements }}" readonly>
         </form>
     </div>
-    <div class=e128_136>
-        <div class="e2_6">
-            <button class="quit" type="submit"><img src="{% static 'website/img/quit_logo.png' %}"></button>
-        </div>
-        <span class="e2_7">Электронное портфолио</span>
 
-
+    <div class="actions">
+        <button class="add-achievement">Добавить достижение</button>
+        <button class="view-achievements">Посмотреть достижения</button>
+        <button class="generate-report">Сформировать отчет</button>
     </div>
 </div>
 </body>
