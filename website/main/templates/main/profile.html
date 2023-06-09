@@ -6,16 +6,27 @@
     <title>Профиль</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'website/css/style_profile.css' %}">
+    <script src="{% static 'website/js/js_profile.js' %}"></script>
 </head>
 <body>
-<div class="sidebar">
-    <h1>Электронное портфолио</h1>
-    <ul>
-        <li><a href="#">Профиль</a></li>
-        <li><a href="#">Выход</a></li>
-    </ul>
-</div>
 <div class="content">
+    <div class="sidebar">
+        <div class="profile-actions">
+            <h1>Электронное портфолио</h1>
+            <ul>
+                <a href="#">Профиль</a>
+                <!--                <a href="#">Выход</a>-->
+                <a href="#" onclick="confirmLogout()">
+                    <div>
+<!--                        <img class="icon_logout" src="{% static 'website/img/logo_logout.svg' %}">-->
+                        Выход
+                    </div>
+                </a>
+
+            </ul>
+        </div>
+    </div>
+
     <h2>Профиль</h2>
     <div class="profile">
         <form>

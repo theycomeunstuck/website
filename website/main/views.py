@@ -75,7 +75,7 @@ def profile(request):
         # fields = LoginUserForm().fill_fields(localId)
         data['value_name'], data['value_surname'], data['value_letter'], data['value_class'], data[
             'value_countAchievements'] = LoginUserForm().fill_fields(localId)
-        print("76 data\n", data)
+        # print("76 data. views.py\n", data)
         # data['value_name'] = fields[0]
         # data['value_surname'] = fields[1]
         # data['value_letter'] = fields[2]
@@ -94,25 +94,28 @@ def profile_buttons(request, name_button):
             add_achievements(request)
         elif "button_list_achievements" in request.POST:
             list_achievements(request)
-    print("something")
+    print("something. 97 views.py")
     return redirect("auth")
 
 
 def add_achievements(request):
-    print('add_achievement')
+    print('add_achievement views.py')
     return HttpResponse("Hello")
 
 
 def list_achievements(request):
-    print('list_achievements')
+    print('list_achievements views.py')
     return HttpResponse("Hello | list")
 
 
 def make_report(request):
-    print('make_report')
+    print('make_report views.py')
 
 
 def logout(request):
-    print("надо выйти бро")
+    response = HttpResponseRedirect("authorization")  # Переадресация на страницу "auth"
+    response.delete_cookie('user_localId')
+    response.delete_cookie('user_idToken')
+    return response
 
 # !profile page end!
