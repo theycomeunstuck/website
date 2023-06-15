@@ -27,9 +27,9 @@ class LoginUserForm():
     def is_valid(self, POST):
         email = POST.get('email')
         password = POST.get('password')
-        print(email, password)
         if email != "" and password != "":
             try:
+                print("forms.py (32) получение user -- авторизациЯ")
                 user = auth.sign_in_with_email_and_password(email, password)
                 return True
             except Exception as e:
@@ -39,7 +39,7 @@ class LoginUserForm():
                     error = "Пользователь с такой почтой не найден"
                 elif error == "INVALID_PASSWORD":
                     error = "Неверный пароль"
-                print(error)
+                print(f"forms.py (41)\n{error}")
                 return error
         else:
             return ""
@@ -49,7 +49,6 @@ class LoginUserForm():
         password = POST.get('password')
         try:
             user = auth.sign_in_with_email_and_password(email, password)
-            json_user = db.child('users').child(user['localId']).child('profile').get()
             # user_data = json_user.val()
             return user
 
@@ -61,3 +60,22 @@ class LoginUserForm():
 
         data = student.val()
         return data['name'], data['surname'], data['letter'], data['class'], data['countAchievements']
+
+def does_user_auth(request): #request.COOKIES
+    if len(request.COOKIES) != 3 or request.COOKIES == '{}':
+
+        return "auth"
+
+        # return redirect('auth')
+
+
+        # try:
+        #     if request.COOKIES["csrftoken"] != "" and request.COOKIES["csrftoken"] != "" and request.COOKIES["csrftoken"] != "":
+        #         continue
+        #     else:
+        #         redirect("auth")
+        # except Exception as e:
+        #     print(f"error when check cookie| {e} \nviews.py (81)")
+        #     return redirect("auth")
+        #TODO | если пользователь не авторизован, то надо и даже не пытаться выводить ему имя и фамку, но постоянно
+        # проверять пользователя -- тоже гемор и долго (наверное). но пока что изложеннное выше решение

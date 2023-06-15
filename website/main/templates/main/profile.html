@@ -6,6 +6,7 @@
     <title>Профиль</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'website/css/style_profile.css' %}">
+    <link rel="icon" href="{% static 'website/img/favicon.ico' %}"><!-- 32×32 -->
     <script src="{% static 'website/js/js_profile.js' %}"></script>
 </head>
 <body>
@@ -14,14 +15,16 @@
         <div class="profile-actions">
             <h1>Электронное портфолио</h1>
             <ul>
-                <a href="#">Профиль</a>
-                <!--                <a href="#">Выход</a>-->
-                <a href="#" onclick="confirmLogout()">
+                <a href="#" onclick="redirectProfile()">
                     <div>
-<!--                        <img class="icon_logout" src="{% static 'website/img/logo_logout.svg' %}">-->
-                        Выход
+                        Профиль
                     </div>
-                </a>
+                    <a href="#" onclick="confirmLogout()">
+                        <div>
+                            <!--                        <img class="icon_logout" src="{% static 'website/img/logo_logout.svg' %}">-->
+                            Выход
+                        </div>
+                    </a>
 
             </ul>
         </div>
@@ -31,19 +34,19 @@
     <div class="profile">
         <form>
             <label for="name">Имя:</label>
-            <input type="text" id="name" name="name" value="{{ name }}" readonly>
+            <input type="text" id="name" name="name" value="{{ value_name }}" readonly>
 
             <label for="surname">Фамилия:</label>
-            <input type="text" id="surname" name="surname" value="{{ surname }}" readonly>
+            <input type="text" id="surname" name="surname" value="{{ value_surname }}" readonly>
 
             <label for="class">Класс:</label>
-            <input type="text" id="class" name="class" value="{{ class }}" readonly>
+            <input type="text" id="class" name="class" value="{{ value_class }}" readonly>
 
             <label for="letter">Буква:</label>
-            <input type="text" id="letter" name="letter" value="{{ letter }}" readonly>
+            <input type="text" id="letter" name="letter" value="{{ value_letter }}" readonly>
 
             <label for="achievements">Количество достижений:</label>
-            <input type="text" id="achievements" name="achievements" value="{{ achievements }}" readonly>
+            <input type="text" id="achievements" name="achievements" value="{{ value_countAchievements }}" readonly>
         </form>
     </div>
 

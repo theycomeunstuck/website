@@ -2,34 +2,36 @@
 
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>{{ title }}</title>
-	{% load static %}
-	<link rel="stylesheet" href=" {% static 'website/css/style_authorization.css' %}">
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    {% load static %}
+    <link rel="stylesheet" href=" {% static 'website/css/style_authorization.css' %}">
+    <link rel="icon" href="{% static 'website/img/favicon.ico' %}">
+
 </head>
 <body>
 
-	<div class="form">
-		<h1>Вход</h1>
-		<form method="POST">
-			{% csrf_token %}
-			{{form}}
-		<div class="input-form">
-			<input type="email" name="email" placeholder="Почта">
-		</div>
-		<div class="input-form">
-			<input type="password" name="password" placeholder="Пароль">
+<div class="form">
+    <h1>Вход</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{form}}
+        <div class="input-form">
+            <input type="email" name="email" placeholder="Почта">
+        </div>
+        <div class="input-form">
+            <input type="password" name="password" placeholder="Пароль">
 
-		</form>
-		<div class="input-form">
-		<input type="submit" value="Войти" >
+    </form>
+    <div class="input-form">
+        <input type="submit" value="Войти">
 
-	</div>
+    </div>
 
-		</div>
+</div>
 
-		<a href="#" class="forget">Забыли пароль?</a>
-	<h2> {{ error }} </h2>
-	</div>
+<a href="#" class="forget">Забыли пароль?</a>
+<h2> {{ error }} </h2>
+</div>
 </body>
 </html>

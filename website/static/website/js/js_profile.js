@@ -11,3 +11,7 @@ function confirmLogout() {
         window.location.href = "/logout"; // Здесь указывается абсолютный путь к URL-шаблону "logout"
     }
 }
+
+function redirectProfile() {
+    window.location.href = "/profile"
+}

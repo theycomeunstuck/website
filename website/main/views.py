@@ -19,6 +19,7 @@ def homepage(request):
 
 # auth page
 def authorization(request):
+    print("22 views auth |views.py")
     data = {
         'title': 'Авторизация',
     }
@@ -32,7 +33,6 @@ def authorization(request):
                 'localId': user['localId'],
                 'idToken': user['idToken']
             }
-
             # print(data)
             response = redirect('profile')
             # response = redirect('/')
@@ -56,26 +56,32 @@ def authorization(request):
 # profile page
 def profile(request):
     # print(data)
+    print("59 profile def | views.py")
     data = {
         'title': 'Профиль'
     }
     name_button, button_pressed = "", False
-    if request.COOKIES == '{}':
+
+    # if request.COOKIES == '{}':
+    if does_user_auth(request) == "auth":
         return redirect('auth')
-    # если можно, то перенести в функцию. сделать проверку на длину первого словаря: если есть не только csrf (len > 1), то в функцию снизу
+
     for line in request.POST:
         if "button" in line:
             button_pressed = True
             name_button = line
 
     if not button_pressed:
+
         localId = request.COOKIES['user_localId']
         idToken = request.COOKIES['user_idToken']
 
         # fields = LoginUserForm().fill_fields(localId)
         data['value_name'], data['value_surname'], data['value_letter'], data['value_class'], data[
             'value_countAchievements'] = LoginUserForm().fill_fields(localId)
-        # print("76 data. views.py\n", data)
+
+
+        # # print("76 data. views.py\n", data)
         # data['value_name'] = fields[0]
         # data['value_surname'] = fields[1]
         # data['value_letter'] = fields[2]
