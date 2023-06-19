@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+        <title>{{ title }}</title>
+
+    <div class="sidebar">
+        <div class="profile-actions">
+            <h1>Электронное портфолио</h1>
+            <ul>
+                <a href="#" onclick="redirectProfile()">
+                    <div>
+                        Профиль
+                    </div>
+                    <a href="#" onclick="confirmLogout()">
+                        <div>
+                            <!--                        <img class="icon_logout" src="{% static 'website/img/logo_logout.svg' %}">-->
+                            Выход
+                        </div>
+                    </a>
+
+            </ul>
+        </div>
+    </div>
+</head>
+<body>
+
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Профиль</title>
+<!--    <title>Профиль</title>TODO-->
     {% load static %}
     <link rel="stylesheet" href="{% static 'website/css/style_profile.css' %}">
     <link rel="icon" href="{% static 'website/img/favicon.ico' %}"><!-- 32×32 -->
@@ -11,25 +11,8 @@
 </head>
 <body>
 <div class="content">
-    <div class="sidebar">
-        <div class="profile-actions">
-            <h1>Электронное портфолио</h1>
-            <ul>
-                <a href="#" onclick="redirectProfile()">
-                    <div>
-                        Профиль
-                    </div>
-                    <a href="#" onclick="confirmLogout()">
-                        <div>
-                            <!--                        <img class="icon_logout" src="{% static 'website/img/logo_logout.svg' %}">-->
-                            Выход
-                        </div>
-                    </a>
 
-            </ul>
-        </div>
-    </div>
-
+    {% include 'templates/sidebar.html' %}
     <h2>Профиль</h2>
     <div class="profile">
         <form>
@@ -51,10 +34,16 @@
     </div>
 
     <div class="actions">
-        <button class="add-achievement">Добавить достижение</button>
-        <button class="view-achievements">Посмотреть достижения</button>
-        <button class="generate-report">Сформировать отчет</button>
-    </div>
+    <button class="button_add_achievement" onclick="handleButtonClick('add_achievement')">Добавить достижение</button>
+    <button class="button_list_achievements" onclick="handleButtonClick('list_achievements')">Посмотреть достижения</button>
+    <button class="button_make_report" onclick="handleButtonClick('make_report')">Сформировать отчет</button>
+</div>
+
+<!--    <div class="actions">-->
+<!--        <button class="button_add_achievement">Добавить достижение</button>-->
+<!--        <button class="button_list_achievements">Посмотреть достижения</button>-->
+<!--        <button class="button_make_report">Сформировать отчет</button>-->
+<!--    </div>-->
 </div>
 </body>
 </html>

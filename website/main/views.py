@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect, JsonResponse
 import pyrebase
 from django.contrib.auth.views import LoginView
 from django.views.generic import ListView, DetailView, CreateView
@@ -88,25 +88,39 @@ def profile(request):
         # data['value_class'] = fields[3]
         # data['value_countAchievements'] = fields[4]
     else:
-        profile_buttons(request, name_button)
+        print(91)
+        profile_buttons_handler(request, name_button)
 
     # print(request.POST.get())
     return render(request, "main/profile.html", data)  # , data)
 
 
-def profile_buttons(request, name_button):
-    if request.POST:
-        if 'button_add_achievement' in request.POST:
+# def profile_buttons_handler(request, name_button):
+#     if request.POST:
+#         print("99")
+#         if 'button_add_achievement' in request.POST:
+#             add_achievements(request)
+#         elif "button_list_achievements" in request.POST:
+#             list_achievements(request)
+#     print("something. 97 views.py")
+#     return redirect("auth")
+def profile_buttons_handler(request):
+    if request.method == 'POST':
+        button_name = request.POST.get('buttonName')
+        if button_name == 'add_achievement':
             add_achievements(request)
-        elif "button_list_achievements" in request.POST:
+        elif button_name == 'list_achievements':
             list_achievements(request)
-    print("something. 97 views.py")
-    return redirect("auth")
-
+        elif button_name == 'make_report':
+            return JsonResponse({'redirect': reverse('report')})
+    return JsonResponse({})
 
 def add_achievements(request):
     print('add_achievement views.py')
-    return HttpResponse("Hello")
+    data = {
+        'title': 'Добавление достижения'
+    }
+    return render(request, "main/add_achievement.html", data)
 
 
 def list_achievements(request):

@@ -1,12 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Добавление достижения</title>
-    <link rel="icon" href="{% static 'website/img/favicon.ico' %}"><!-- 32×32 -->
-
+    <title>Добавить достижение</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="script.js"></script>
 </head>
 <body>
+    {% include 'templates/sidebar.html' %}
 
+    <div class="content">
+        <h1>Добавить достижение</h1>
+
+        <form id="achievementForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="competitionType">Вид конкурса:</label>
+                <select id="competitionType" name="competitionType">
+                    <option value="Первая">Первая</option>
+                    <option value="Вторая">Вторая</option>
+                    <option value="Третья">Третья</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="workName">Название работы:</label>
+                <input type="text" id="workName" name="workName">
+            </div>
+
+            <div class="form-group">
+                <label for="documentType">Вид документа:</label>
+                <select id="documentType" name="documentType">
+                    <option value="Первая">Первая</option>
+                    <option value="Вторая">Вторая</option>
+                    <option value="Третья">Третья</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="competitionDate">Дата проведения:</label>
+                <input type="date" id="competitionDate" name="competitionDate">
+            </div>
+
+            <div class="form-group">
+                <label for="position">Занятое место:</label>
+                <select id="position" name="position">
+                    <option value="Первая">Первая</option>
+                    <option value="Вторая">Вторая</option>
+                    <option value="Третья">Третья</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="olympiadLevel">Уровень олимпиады:</label>
+                <select id="olympiadLevel" name="olympiadLevel">
+                    <option value="Первая">Первая</option>
+                    <option value="Вторая">Вторая</option>
+                    <option value="Третья">Третья</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="subject">Предмет:</label>
+                <select id="subject" name="subject">
+                    <option value="Первая">Первая</option>
+                    <option value="Вторая">Вторая</option>
+                    <option value="Третья">Третья</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="scan">Скан:</label>
+                <input type="file" id="scan" name="scan">
+            </div>
+
+            <button type="submit">Добавить</button>
+        </form>
+    </div>
+
+    <div id="errorMessage" class="error-message"></div>
+
+    <script>
+        const form = document.getElementById("achievementForm");
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+            const formData = new FormData(form);
+            if (validateForm(formData)) {
+                // Отправить данные на сервер
+                // ...
+            }
+        });
+
+        function validateForm(formData) {
+            let isValid = true;
+            let errorMessage = "";
+
+            if (formData.get("workName").trim() === "") {
+                isValid = false;
+                errorMessage += "Введите название работы. ";
+            }
+
+            // Проверка на другие поля
+
+            if (!isValid) {
+                document.getElementById("errorMessage").textContent = errorMessage;
+            }
+
+            return isValid;
+        }
+    </script>
 </body>
 </html>
