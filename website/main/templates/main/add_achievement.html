@@ -1,12 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Добавление достижения</title>
-    <link rel="icon" href="{% static 'website/img/favicon.ico' %}"><!-- 32×32 -->
+    {% load static %}
+    <link rel="icon" href="{% static 'website/img/favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'website/css/style_add_achievement.css' %}">
+<!--    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+<!--    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>-->
+    <script src="{% static 'website/js/js_add_achievement.js' %}"></script>
 
 </head>
 <body>
+{% include 'templates/sidebar.html' %}
+
+<div class="content">
+    <h1>Добавление конкурса</h1>
+    <form id="achievementForm">
+        <div class="form-group">
+            <label for="competitionType">Вид конкурса:</label>
+            <select id="competitionType" name="competitionType">
+                <option value="первая">Первая</option>
+                <option value="вторая">Вторая</option>
+                <option value="третья">Третья</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="workName">Название работы:</label>
+            <input type="text" id="workName" name="workName" required>
+        </div>
+        <div class="form-group">
+            <label for="documentType">Вид документа:</label>
+            <select id="documentType" name="documentType">
+                <option value="первая">Первая</option>
+                <option value="вторая">Вторая</option>
+                <option value="третья">Третья</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="eventDate">Дата проведения:</label>
+<!--            <input type="text" id="eventDate" name="eventDate" class="datepicker" required>-->
+            <input type="date" id="eventDate" name="eventDate" class="datepicker" required>
+        </div>
+
+        <div class="form-group">
+            <label for="position">Занятое место:</label>
+            <select id="position" name="position">
+                <option value="первая">Первая</option>
+                <option value="вторая">Вторая</option>
+                <option value="третья">Третья</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="olympiadLevel">Уровень олимпиады:</label>
+            <select id="olympiadLevel" name="olympiadLevel">
+                <option value="первая">Первая</option>
+                <option value="вторая">Вторая</option>
+                <option value="третья">Третья</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="subject">Предмет:</label>
+            <select id="subject" name="subject">
+                <option value="первая">Первая</option>
+                <option value="вторая">Вторая</option>
+                <option value="третья">Третья</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="scan">Загрузить скан:</label>
+            <input type="file" id="scan" name="scan" accept=".pdf,.doc,.docx">
+        </div>
+        <button type="submit">Добавить достижение</button>
+    </form>
+</div>
 
 </body>
 </html>

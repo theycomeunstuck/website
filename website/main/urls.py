@@ -7,9 +7,9 @@ urlpatterns = [
     path('', homepage),
     path('authorization', authorization, name='auth'),
     path('profile', profile, name='profile'),
-    path('add_achievement', add_achievements, name='add'),
-    path('list_achievements', list_achievements, name='list'),
-    path('make_achievement', make_report, name='make'),
+    path('add_achievement', add_achievements, name='add_achievement'),
+    path('list_achievements', list_achievements, name='list_achievements'),
+    path('make_report', make_report, name='make_report'),
     path('logout', logout, name='logout'),
     # path('postsignin', postsignin)
     # path('account')

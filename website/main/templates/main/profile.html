@@ -3,33 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Профиль</title>
+    <!--    <title>Профиль</title>TODO-->
     {% load static %}
     <link rel="stylesheet" href="{% static 'website/css/style_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'website/css/public/style_sidebar.css' %}">
     <link rel="icon" href="{% static 'website/img/favicon.ico' %}"><!-- 32×32 -->
     <script src="{% static 'website/js/js_profile.js' %}"></script>
 </head>
 <body>
 <div class="content">
-    <div class="sidebar">
-        <div class="profile-actions">
-            <h1>Электронное портфолио</h1>
-            <ul>
-                <a href="#" onclick="redirectProfile()">
-                    <div>
-                        Профиль
-                    </div>
-                    <a href="#" onclick="confirmLogout()">
-                        <div>
-                            <!--                        <img class="icon_logout" src="{% static 'website/img/logo_logout.svg' %}">-->
-                            Выход
-                        </div>
-                    </a>
 
-            </ul>
-        </div>
-    </div>
-
+    {% include 'templates/sidebar.html' %}
     <h2>Профиль</h2>
     <div class="profile">
         <form>
@@ -49,12 +33,34 @@
             <input type="text" id="achievements" name="achievements" value="{{ value_countAchievements }}" readonly>
         </form>
     </div>
-
     <div class="actions">
-        <button class="add-achievement">Добавить достижение</button>
-        <button class="view-achievements">Посмотреть достижения</button>
-        <button class="generate-report">Сформировать отчет</button>
+        <form action="{% url 'add_achievement' %}" method="post">
+            {% csrf_token %}
+            <button class="button_add_achievement" name="buttonName" value="add_achievement">Добавить достижение
+            </button>
+        </form>
+
+        <form action="{% url 'list_achievements' %}" method="post">
+            {% csrf_token %}
+            <button class="button_list_achievements" name="buttonName" value="list_achievements">Посмотреть достижения
+            </button>
+        </form>
+
+        <form action="{% url 'make_report' %}" method="post">
+            {% csrf_token %}
+            <button class="button_make_report" name="buttonName" value="make_report">Сформировать отчет</button>
+        </form>
+
+        </form>
     </div>
+
+</div>
+
+<!--    <div class="actions">-->
+<!--        <button class="button_add_achievement">Добавить достижение</button>-->
+<!--        <button class="button_list_achievements">Посмотреть достижения</button>-->
+<!--        <button class="button_make_report">Сформировать отчет</button>-->
+<!--    </div>-->
 </div>
 </body>
 </html>
