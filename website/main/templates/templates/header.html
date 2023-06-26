@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% load static %}
+<link rel="stylesheet" href="{% static 'website/css/public/style_header.css' %}">
+<html lang="en">
+<head>
+    <title>{{ title }}</title>
+</head>
+<body>
+<div class="header">
+    <div class="profile-actions">
+        <h1>Электронное портфолио</h1>
+        <a href="#" onclick="redirectProfile()">
+            <div>Профиль</div>
+        <a href="#" onclick="confirmLogout()">
+            <div>Выход</div></a>
+    </div>
+</div>
+
+</body>
+</html>
+                        <!--                        <img class="icon_logout" src="{% static 'website/img/logo_logout.svg' %}">-->
