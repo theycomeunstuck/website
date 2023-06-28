@@ -14,13 +14,21 @@
 
 <div class="content">
     <h1>Добавление конкурса</h1>
-    <form id="achievementForm">
+    <form method="POST" id="achievementForm">
         <div class="form-group">
             <label for="competitionType">Вид конкурса:</label>
             <select id="competitionType" name="competitionType">
-                <option value="первая">Первая</option>
-                <option value="вторая">Вторая</option>
-                <option value="третья">Третья</option>
+                <option value="Олимпиада">Олимпиада</option>
+                <option value="Конференция">Конференция</option>
+                <option value="Фестиваль">Фестиваль</option>
+                <option value="Семинар">Семинар</option>
+                <option value="Конкурс">Конкурс</option>
+                <option value="Курс">Курс</option>
+                <option value="Вебинар">Вебинар</option>
+                <option value="Проект">Проект</option>
+                <option value="Стажировка">Стажировка</option>
+                <option value="Мастер-класс">Мастер-класс</option>
+                <option value="Пресс-конференция">Пресс-конференция</option>
             </select>
         </div>
         <div class="form-group">
@@ -28,47 +36,73 @@
             <input type="text" id="workName" name="workName" required>
         </div>
         <div class="form-group">
+            <label for="workType">Вид работы:</label>
+            <select id="workType" name="documentType">
+                <option value="Проект">Проект</option>
+                <option value="Исследование">Исследование</option>
+                <option value="Решение задач">Решение задач</option>
+                <option value="Выступление">Выступление</option>
+                <option value="Художественное творчество">Художественное творчество</option>
+                <option value="Бизнес-план">Бизнес-план</option>
+            </select>
+        </div>
+        <div class="form-group">
             <label for="documentType">Вид документа:</label>
             <select id="documentType" name="documentType">
-                <option value="первая">Первая</option>
-                <option value="вторая">Вторая</option>
-                <option value="третья">Третья</option>
+                <option value="Сертификат">Сертификат</option>
+                <option value="Грамота">Грамота</option>
+                <option value="Диплом">Диплом</option>
+                <option value="Благодарность">Благодарность</option>
+                <option value="Удостоверение">Удостоверение</option>
+                <option value="Справка">Справка</option>
+                <option value="Статья">Статья</option>
+                <option value="Медаль">Медаль</option>
             </select>
         </div>
         <div class="form-group">
             <label for="eventDate">Дата проведения:</label>
-<!--            <input type="text" id="eventDate" name="eventDate" class="datepicker" required>-->
             <input type="date" id="eventDate" name="eventDate" class="datepicker" required>
         </div>
 
         <div class="form-group">
             <label for="position">Занятое место:</label>
             <select id="position" name="position">
-                <option value="первая">Первая</option>
-                <option value="вторая">Вторая</option>
-                <option value="третья">Третья</option>
+                <option value="Участник">Участник</option>
+                <option value="Призёр">Призёр</option>
+                <option value="Победитель   ">Победитель</option>
             </select>
         </div>
         <div class="form-group">
-            <label for="olympiadLevel">Уровень олимпиады:</label>
+            <label for="olympiadLevel">Уровень конкурса:</label>
             <select id="olympiadLevel" name="olympiadLevel">
-                <option value="первая">Первая</option>
-                <option value="вторая">Вторая</option>
-                <option value="третья">Третья</option>
+                <option value="Школьный">Школьный</option>
+                <option value="Региональный">Региональный</option>
+                <option value="Муниципальный">Муниципальный</option>
+                <option value="Федеральный">Федеральный</option>
+                <option value="Международный">Международный</option>
             </select>
         </div>
         <div class="form-group">
             <label for="subject">Предмет:</label>
             <select id="subject" name="subject">
-                <option value="первая">Первая</option>
-                <option value="вторая">Вторая</option>
-                <option value="третья">Третья</option>
+                <option value="Математика">Математика</option>
+                <option value="Русский язык">Русский язык</option>
+                <option value="Английский язык">Английский язык</option>
+                <option value="Литература">Литература</option>
+                <option value="Физика">Физика</option>
+                <option value="Биология">Биология</option>
+                <option value="География">География</option>
+                <option value="Физическая культура">Физическая культура</option>
+                <option value="ОБЖ">ОБЖ</option>
+                <option value="Химия">Химия</option>
+                <option value="Другое">Другое</option>
             </select>
         </div>
         <div class="form-group">
             <label for="scan">Загрузить скан:</label>
-            <input type="file" id="scan" name="scan" accept=".pdf,.doc,.docx">
+            <input type="file" id="scan" name="scan" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.gif,.zip,.rar,.7z,.bmp,.ppt,.pptx">
         </div>
+
         <button type="submit">Добавить достижение</button>
     </form>
 </div>
