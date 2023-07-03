@@ -21,6 +21,7 @@ firebaseConfig = {
 firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
 db = firebase.database()
+storage = firebase.storage()
 
 
 class LoginUserForm():
@@ -61,13 +62,12 @@ class LoginUserForm():
         data = student.val()
         return data['name'], data['surname'], data['letter'], data['class'], data['countAchievements']
 
-def does_user_auth(request): #request.COOKIES
+
+def does_user_auth(request):  # request.COOKIES
     if len(request.COOKIES) != 3 or request.COOKIES == '{}':
+        # return False  # пользователь не авторизован
 
-        return "auth"
-
-        # return redirect('auth')
-
+        return 'auth'
 
         # try:
         #     if request.COOKIES["csrftoken"] != "" and request.COOKIES["csrftoken"] != "" and request.COOKIES["csrftoken"] != "":
@@ -77,5 +77,35 @@ def does_user_auth(request): #request.COOKIES
         # except Exception as e:
         #     print(f"error when check cookie| {e} \nviews.py (81)")
         #     return redirect("auth")
-        #TODO | если пользователь не авторизован, то надо и даже не пытаться выводить ему имя и фамку, но постоянно
+        # TODO | если пользователь не авторизован, то надо и даже не пытаться выводить ему имя и фамку, но постоянно
         # проверять пользователя -- тоже гемор и долго (наверное). но пока что изложеннное выше решение
+
+
+def add_user_achievement(request):
+    localId = request.COOKIES['user_localId']
+    idToken = request.COOKIES['user_idToken']
+    #добавление достижения в бд
+    competition_name = request.POST.get('workName')
+    achievement = {"competition_type": request.POST.get('competitionType'),
+                   "competition_name": competition_name,
+                   "work_type": request.POST.get('workType'),
+                   "type_document": request.POST.get('documentType'),
+                   "date": request.POST.get('eventDate'),
+                   "place": request.POST.get('position'),
+                   "level_competition": request.POST.get('olympiadLevel'),
+                   "subject": request.POST.get('subject')}
+    print(f'file_format: {request.POST.get("scan")}')
+
+    db.child('users').child(localId).child('achievements').push(achievement)
+
+    #добавление скана в бд (storage)
+    # achievements = db.child('users').child(localId).child('achievements').get()
+    # data3 = achievements.val()
+
+    # for key in data3:
+    #     name2 = data3[key]['competition_name']
+    #     if name2 == competition_name:
+    #         key_achievement = key
+    # storage.child("/" + localId + "/" + key_achievement + "." + file_format).put(self.fpath, idToken)
+    # print(storage.child(localId + "/" + key_achievement + "." + file_format).get_url(user['idToken']))
+

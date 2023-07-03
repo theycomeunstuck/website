@@ -15,6 +15,7 @@
 <div class="content">
     <h1>Добавление конкурса</h1>
     <form method="POST" id="achievementForm">
+        {% csrf_token %}
         <div class="form-group">
             <label for="competitionType">Вид конкурса:</label>
             <select id="competitionType" name="competitionType">
@@ -37,7 +38,7 @@
         </div>
         <div class="form-group">
             <label for="workType">Вид работы:</label>
-            <select id="workType" name="documentType">
+            <select id="workType" name="workType">
                 <option value="Проект">Проект</option>
                 <option value="Исследование">Исследование</option>
                 <option value="Решение задач">Решение задач</option>

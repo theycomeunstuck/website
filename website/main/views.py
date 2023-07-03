@@ -49,8 +49,6 @@ def authorization(request):
             return render(request, "main/authorization.html", data)
     if not returned:
         return render(request, "main/authorization.html", data)
-
-
 # !auth page end!
 
 # profile page
@@ -64,7 +62,8 @@ def profile(request):
     # if request.COOKIES == '{}':
     if does_user_auth(request) == "auth":
         return redirect('auth')
-
+        print("unlogged")
+    print("logged")
     for line in request.POST:
         if "button" in line:
             button_pressed = True
@@ -92,33 +91,38 @@ def profile_buttons_handler(request):
     if request.method == 'POST':
         button_name = request.POST.get('buttonName')
         if button_name == 'add_achievement':
-            add_achievements(request)
+            return redirect('add_achievement')
         elif button_name == 'list_achievements':
-            list_achievements(request)
+            return redirect('list_achievements')
         elif button_name == 'make_report':  # TODO: chto eto za huinya
-            return JsonResponse({'redirect': reverse('report')})
-    return JsonResponse({})
+            return redirect('make_report')
+# !profile page end!
 
-
-def add_achievements(request):
-    if does_user_auth(request) == "auth":
-        return redirect('auth')
+def add_achievement(request):
+    if request.method == "GET":
+        if does_user_auth(request) == "auth":
+            return redirect('auth')
+        data = {'title':'Добавление достижения'}
+        return render(request, "main/add_achievement.html", data)
 
     if request.method == 'POST':
-        error, result = ''
-
+        error, result = '', ''
         data = {
             "result": result,
             "error": error
         }
-        return render(request, "main/profile.html", data)
+        add_user_achievement(request)
 
-    else:
 
-        data = {
-            'title': 'Добавление достижения'
-        }
-        return render(request, "main/add_achievement.html", data)
+
+        return render(request, "main/profile.html", data) #пригвоздить алерт об успешном завершении
+
+# else:
+
+    data = {
+        'title': 'Добавление достижения'
+    }
+    return render(request, "main/add_achievement.html", data)
 
 
 def list_achievements(request):
