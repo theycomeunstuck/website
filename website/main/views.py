@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect, JsonResponse
 import pyrebase
+from django.core.files.uploadedfile import UploadedFile
 from django.contrib.auth.views import LoginView
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -99,25 +100,20 @@ def profile_buttons_handler(request):
 # !profile page end!
 
 def add_achievement(request):
+    data = {'title':'Добавление достижения'}
     if request.method == "GET":
         if does_user_auth(request) == "auth":
             return redirect('auth')
-        data = {'title':'Добавление достижения'}
         return render(request, "main/add_achievement.html", data)
 
     if request.method == 'POST':
-        error, result = '', ''
-        data = {
-            "result": result,
-            "error": error
-        }
-        add_user_achievement(request)
+        data['message'] = add_user_achievement(request)
+        if data['message'] != 'Достижение успешно добавлено!':
+            data['error_message'] = data['message']
+        return render(request, "main/add_achievement.html", data)
+        # return redirect('profile') #пригвоздить алерт об успешном завершении
 
-
-
-        return render(request, "main/profile.html", data) #пригвоздить алерт об успешном завершении
-
-# else:
+    # else:
 
     data = {
         'title': 'Добавление достижения'

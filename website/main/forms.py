@@ -1,12 +1,11 @@
 from django import forms
 import pyrebase, urllib3, json
+from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
-# class NameForm(forms.Form):
-#     email = forms.EmailField()
-#     password = forms.CharField(max_length=100)
+
 
 firebaseConfig = {
     'apiKey': "AIzaSyCtqWOd1gcXuDH3cFUdQzxj8Ii6f4f9zS4",
@@ -64,11 +63,17 @@ class LoginUserForm():
 
 
 def does_user_auth(request):  # request.COOKIES
-    if len(request.COOKIES) != 3 or request.COOKIES == '{}':
-        # return False  # пользователь не авторизован
-
+    if len(request.COOKIES) != 3 or len(request.COOKIES) < 3 or request.COOKIES == '{}':
+        print(f'forms.py | 67 | redirect to auth')
         return 'auth'
-
+    # try:
+    #     if not(request.COOKIES['user_localId'] in request.COOKIES) and not(request.COOKIES['user_idToken'] in request.COOKIES):
+    #         print(f'forms.py | 71 | redirect to auth')
+    #         return 'auth'
+    #
+    # except Exception as e:
+    #     print(f"forms.py | 74| {e}")
+        # idToken = request.COOKIES['user_idToken']
         # try:
         #     if request.COOKIES["csrftoken"] != "" and request.COOKIES["csrftoken"] != "" and request.COOKIES["csrftoken"] != "":
         #         continue
@@ -82,30 +87,40 @@ def does_user_auth(request):  # request.COOKIES
 
 
 def add_user_achievement(request):
-    localId = request.COOKIES['user_localId']
-    idToken = request.COOKIES['user_idToken']
-    #добавление достижения в бд
-    competition_name = request.POST.get('workName')
-    achievement = {"competition_type": request.POST.get('competitionType'),
-                   "competition_name": competition_name,
-                   "work_type": request.POST.get('workType'),
-                   "type_document": request.POST.get('documentType'),
-                   "date": request.POST.get('eventDate'),
-                   "place": request.POST.get('position'),
-                   "level_competition": request.POST.get('olympiadLevel'),
-                   "subject": request.POST.get('subject')}
-    print(f'file_format: {request.POST.get("scan")}')
+    try:
+        localId = request.COOKIES['user_localId']
+        idToken = request.COOKIES['user_idToken']
 
-    db.child('users').child(localId).child('achievements').push(achievement)
+        #добавление достижения в бд
+        _File = request.FILES['scan']
+        competition_name, _File_format, _Date = request.POST.get('workName'), str(_File).split(".")[-1], request.POST.get('eventDate')
+        _Year, _Month, _Day = _Date.split("-")
+        _Date = f'{_Day}.{_Month}.{_Year}'
+        achievement = {"competition_type": request.POST.get('competitionType'),
+                       "competition_name": competition_name,
+                       "work_type": request.POST.get('workType'),
+                       "type_document": request.POST.get('documentType'),
+                       "date": _Date,
+                       "place": request.POST.get('position'),
+                       "level_competition": request.POST.get('olympiadLevel'),
+                       "subject": request.POST.get('subject'),
+                       'file_format': _File_format}
 
-    #добавление скана в бд (storage)
-    # achievements = db.child('users').child(localId).child('achievements').get()
-    # data3 = achievements.val()
 
-    # for key in data3:
-    #     name2 = data3[key]['competition_name']
-    #     if name2 == competition_name:
-    #         key_achievement = key
-    # storage.child("/" + localId + "/" + key_achievement + "." + file_format).put(self.fpath, idToken)
-    # print(storage.child(localId + "/" + key_achievement + "." + file_format).get_url(user['idToken']))
+        db.child('users').child(localId).child('achievements').push(achievement)
+
+        #добавление скана в бд (storage)
+        achievements = db.child('users').child(localId).child('achievements').get()
+        data3 = achievements.val()
+
+        for key in data3:
+            name2 = data3[key]['competition_name']
+            if name2.lower() == competition_name.lower():
+                storage.child("/" + localId + "/" + key + "." + _File_format).put(_File, idToken)
+                break
+        return 'Достижение успешно добавлено!'
+    except Exception as e:
+        return f'Достижение не добавлено.\n{e}'
+
+    # storage.child("/" + localId + "/" + key_achievement + "." + _File_format).put(_File, idToken)
 

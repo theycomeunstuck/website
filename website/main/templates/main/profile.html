@@ -32,7 +32,7 @@
         </form>
     </div>
     <div class="actions">
-        <form action="{% url 'add_achievement' %}" method="post">
+        <form action="{% url 'add_achievement' %}">
             {% csrf_token %}
             <button class="button_add_achievement" name="buttonName" value="add_achievement">Добавить достижение
             </button>

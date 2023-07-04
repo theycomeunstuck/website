@@ -12,9 +12,39 @@
 <body>
 {% include 'templates/header.html' %}
 
+
+{% if error_message %}
+    <div id="notification" class="notification error">
+        <p>{{ error_message }}</p>
+        <button id="ok-button">OK</button>
+    </div>
+{% elif message %}
+    <div id="notification" class="notification success">
+        <p>{{ message }}</p>
+        <button id="ok-button">OK</button>
+    </div>
+{% endif %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var notification = document.getElementById('notification');
+        var okButton = document.getElementById('ok-button');
+        if (notification) {
+            notification.style.display = 'block';
+
+            // Функция для перенаправления на профиль
+            function redirectToProfile() {
+                window.location.href = '/profile';
+            }
+            setTimeout(redirectToProfile, 10000);
+            okButton.addEventListener('click', redirectToProfile);
+        }
+    });
+</script>
+
+
 <div class="content">
     <h1>Добавление конкурса</h1>
-    <form method="POST" id="achievementForm">
+    <form method="POST" id="achievementForm" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-group">
             <label for="competitionType">Вид конкурса:</label>
@@ -107,6 +137,5 @@
         <button type="submit">Добавить достижение</button>
     </form>
 </div>
-
 </body>
 </html>
