@@ -56,9 +56,16 @@ class LoginUserForm():
             print(e)
 
     def fill_fields(self, localId):
-        student = db.child('users').child(localId).child('profile').get(0)
-
+        student = db.child('users').child(localId).child('profile').get()
         data = student.val()
+
+        _Data = db.child('users').child(localId).child('achievements').get().val()
+        i = 0
+
+        for _key in _Data:
+            i += 1
+
+        data['countAchievements'] = i
         return data['name'], data['surname'], data['letter'], data['class'], data['countAchievements']
 
 
@@ -120,6 +127,7 @@ def add_user_achievement(request):
                 break
         return 'Достижение успешно добавлено!'
     except Exception as e:
+        print(f'forms.py| 121| !!!достижение НЕ добавлено\n{e}')
         return f'Достижение не добавлено.\n{e}'
 
     # storage.child("/" + localId + "/" + key_achievement + "." + _File_format).put(_File, idToken)

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect, JsonResponse, HttpResponseBadRequest
 import pyrebase
 from django.core.files.uploadedfile import UploadedFile
 from django.contrib.auth.views import LoginView
@@ -20,36 +20,40 @@ def homepage(request):
 
 # auth page
 def authorization(request):
-    print("22 views auth |views.py")
-    data = {
-        'title': 'Авторизация',
-    }
-    returned = False
-    if request.method == "POST":
-        form = LoginUserForm()
-        result = form.is_valid(request.POST)
-        if result == True:  # если пользователь существует
-            user = form.auth(request.POST)  # получаем его данные
-            user_data = {
-                'localId': user['localId'],
-                'idToken': user['idToken']
-            }
-            # print(data)
-            response = redirect('profile')
-            # response = redirect('/')
-            # response.set_cookie(name='data_user', value=data, max_age=259200)
+    if does_user_auth(request) == "auth":
+        print("22 views auth |views.py")
+        data = {
+            'title': 'Авторизация',
+        }
+        returned = False
 
-            response.set_cookie('user_localId', user_data['localId'], 259200)
-            response.set_cookie('user_idToken', user_data['idToken'], 259200)
-            # return redirect('profile')
-            return response
-        else:
+        if request.method == "POST":
+            form = LoginUserForm()
+            result = form.is_valid(request.POST)
+            if result == True:  # если пользователь существует
+                user = form.auth(request.POST)  # получаем его данные
+                user_data = {
+                    'localId': user['localId'],
+                    'idToken': user['idToken']
+                }
+                # print(data)
+                response = redirect('profile')
+                # response = redirect('/')
+                # response.set_cookie(name='data_user', value=data, max_age=259200)
 
-            data['error'] = result
+                response.set_cookie('user_localId', user_data['localId'], 259200)
+                response.set_cookie('user_idToken', user_data['idToken'], 259200)
+                # return redirect('profile')
+                return response
+            else:
 
+                data['error'] = result
+
+                return render(request, "main/authorization.html", data)
+        if not returned:
             return render(request, "main/authorization.html", data)
-    if not returned:
-        return render(request, "main/authorization.html", data)
+    else:
+        return redirect('profile')
 # !auth page end!
 
 # profile page
@@ -99,27 +103,25 @@ def profile_buttons_handler(request):
             return redirect('make_report')
 # !profile page end!
 
+# add_achievement page
 def add_achievement(request):
     data = {'title':'Добавление достижения'}
-    if request.method == "GET":
-        if does_user_auth(request) == "auth":
-            return redirect('auth')
-        return render(request, "main/add_achievement.html", data)
+    if does_user_auth(request) == "auth":
+        return redirect('auth')
 
-    if request.method == 'POST':
+    if request.POST.get('workName') != None :  #при редиректе метод пост
         data['message'] = add_user_achievement(request)
         if data['message'] != 'Достижение успешно добавлено!':
             data['error_message'] = data['message']
-        return render(request, "main/add_achievement.html", data)
-        # return redirect('profile') #пригвоздить алерт об успешном завершении
+        # achievement_title = request.POST.get('achievement_title')
 
-    # else:
+    return render(request, "main/add_achievement.html", data) #js script in html to redirect('profile')
 
-    data = {
-        'title': 'Добавление достижения'
-    }
-    return render(request, "main/add_achievement.html", data)
 
+
+
+
+# !add_achievement page end!
 
 def list_achievements(request):
     print('list_achievements views.py')
@@ -136,4 +138,4 @@ def logout(request):
     response.delete_cookie('user_idToken')
     return response
 
-# !profile page end!
+
