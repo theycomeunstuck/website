@@ -2,7 +2,9 @@
 <html>
 <head>
     <title>Успех!</title>
-    <link rel="stylesheet" href="{% static 'website/css/public/style_success.css' %}">
+        {% load static %}
+
+    <link rel="stylesheet" href="{% static 'website/css/public/style_notification.css' %}">
 
 </head>
 <body>
@@ -17,6 +19,7 @@
     <button id="ok-button">OK</button>
 </div>
 {% endif %}
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var notification = document.getElementById('notification');

@@ -100,6 +100,7 @@ def add_user_achievement(request):
 
         #добавление достижения в бд
         _File = request.FILES['scan']
+        print("103,",request.FILES['scan'].name)
         competition_name, _File_format, _Date = request.POST.get('workName'), str(_File).split(".")[-1], request.POST.get('eventDate')
         _Year, _Month, _Day = _Date.split("-")
         _Date = f'{_Day}.{_Month}.{_Year}'

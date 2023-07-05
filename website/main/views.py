@@ -96,11 +96,11 @@ def profile_buttons_handler(request):
     if request.method == 'POST':
         button_name = request.POST.get('buttonName')
         if button_name == 'add_achievement':
-            return redirect('add_achievement')
+            return redirect('add-achievement')
         elif button_name == 'list_achievements':
-            return redirect('list_achievements')
-        elif button_name == 'make_report':  # TODO: chto eto za huinya
-            return redirect('make_report')
+            return redirect('list-achievements')
+        elif button_name == 'make_report':
+            return redirect('make-report')
 # !profile page end!
 
 # add_achievement page

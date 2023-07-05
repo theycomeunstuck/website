@@ -4,44 +4,17 @@
     {% load static %}
     <link rel="icon" href="{% static 'website/img/favicon.ico' %}">
     <link rel="stylesheet" href="{% static 'website/css/style_add_achievement.css' %}">
+<!--    <link rel="stylesheet" href="{% static 'website/css/public/style_notification.css' %}">-->
+
     <!--    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
     <!--    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>-->
     <script src="{% static 'website/js/js_add_achievement.js' %}"></script>
 
 </head>
 <body>
+
 {% include 'templates/header.html' %}
-
-
-{% if error_message %}
-<div id="notification" class="notification error">
-    <p>{{ error_message }}</p>
-    <button id="ok-button">OK</button>
-</div>
-{% elif message %}
-<div id="notification" class="notification success">
-    <p>{{ message }}</p>
-    <button id="ok-button">OK</button>
-</div>
-{% endif %}
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var notification = document.getElementById('notification');
-        var okButton = document.getElementById('ok-button');
-        if (notification) {
-            notification.style.display = 'block';
-
-            // Функция для перенаправления на профиль
-            function redirectToProfile() {
-                window.location.href = '/profile';
-            }
-
-            setTimeout(redirectToProfile, 10000);
-            okButton.addEventListener('click', redirectToProfile);
-        }
-    });
-</script>
-
+{% include 'templates/notification.html' %}
 
 <div class="content">
     <h1>Добавление конкурса</h1>
@@ -121,10 +94,9 @@
         <option value="Другое" {% if request.POST.subject == 'Другое' %}selected{% endif %}>Другое</option>
     </select>
 </div>
-        <div class="form-group">
+        <div class="form-group" id="scanarea">
             <label for="scan">Загрузить скан:</label>
-            <input type="file" id="scan" name="scan"
-                   accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.gif,.zip,.rar,.7z,.bmp,.ppt,.pptx" required>
+            <input type="file" id="scan" name="scan" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.gif,.zip,.rar,.7z,.bmp,.ppt,.pptx" required>
         </div>
 
 
