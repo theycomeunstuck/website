@@ -119,13 +119,15 @@ def add_achievement(request):
 
 
 
-
-
 # !add_achievement page end!
 
 def list_achievements(request):
     print('list_achievements views.py')
-    return HttpResponse("Hello | list")
+    data = {'title': 'Добавление достижения'}
+    if does_user_auth(request) == "auth":
+        return redirect('auth')
+
+    return render(request, "main/list_achievements.html", data)
 
 
 def make_report(request):
