@@ -130,6 +130,12 @@ def list_achievements(request):
     return render(request, "main/list_achievements.html", data)
 
 
+
+def edit_achievement(request): #в куки передавать токен достижения
+    data = {'title': 'Редактирование достижения'}
+
+    return render(request, "main/edit_achievement.html", data)
+
 def make_report(request):
     print('make_report views.py')
 
