@@ -101,6 +101,9 @@ def profile_buttons_handler(request):
             return redirect('list-achievements')
         elif button_name == 'make_report':
             return redirect('make-report')
+        elif button_name == '':
+            pass
+
 # !profile page end!
 
 # add_achievement page
@@ -122,19 +125,27 @@ def add_achievement(request):
 # !add_achievement page end!
 
 def list_achievements(request):
-    print('list_achievements views.py')
-    data = {'title': 'Добавление достижения'}
     if does_user_auth(request) == "auth":
         return redirect('auth')
 
+    data = {'title': 'Добавление достижения', 'achievements': get_list_achievements(request)}
     return render(request, "main/list_achievements.html", data)
 
 
+# !list_achievements page end!
 
-def edit_achievement(request): #в куки передавать токен достижения
-    data = {'title': 'Редактирование достижения'}
+def edit_achievement(request, key): #в куки передавать токен достижения
+    #todo: удалить достижение
+    #todo: вернуться мб?
+    url, achievement = fill_achievement_fields(request, key)
+    print(f'url={url}\n')
+    print(achievement)
+    data = {'title': 'Редактирование достижения',
+            'achievement': achievement,
+            'scan_url': url} # todo: ??^?^? замена значений через другую функцию forms.ру
 
     return render(request, "main/edit_achievement.html", data)
+
 
 def make_report(request):
     print('make_report views.py')

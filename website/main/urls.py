@@ -12,6 +12,6 @@ urlpatterns = [
     path('list-achievements', list_achievements, name='list_achievements'),
     path('make-report', make_report, name='make_report'),
     path('logout', logout, name='logout'),
-    path('edit-achievement', edit_achievement, name='edit_achievement'),
+    path('edit-achievement/<str:key>/', edit_achievement, name='edit_achievement'),
 
 ]

@@ -4,100 +4,105 @@
     {% load static %}
     <link rel="icon" href="{% static 'website/img/favicon.ico' %}">
     <link rel="stylesheet" href="{% static 'website/css/style_edit_achievement.css' %}">
-    <script src="{% static 'website/js/js_add_achievement.js' %}"></script>
+    <script src="{% static 'website/js/js_edit_achievement.js' %}"></script>
 
 </head>
 <body>
 
 {% include 'templates/header.html' %}
 {% include 'templates/notification.html' %}
-
 <div class="content">
     <h1>Редактирование достижения</h1>
     <form method="POST" id="achievementForm" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-group">
-    <label for="competitionType">Вид конкурса:</label>
-    <select id="competitionType" name="competitionType">
-        <option value="Олимпиада" {% if request.POST.competitionType == 'Олимпиада' %}selected{% endif %}>Олимпиада</option>
-        <option value="Конференция" {% if request.POST.competitionType == 'Конференция' %}selected{% endif %}>Конференция</option>
-        <option value="Фестиваль" {% if request.POST.competitionType == 'Фестиваль' %}selected{% endif %}>Фестиваль</option>
-        <option value="Семинар" {% if request.POST.competitionType == 'Семинар' %}selected{% endif %}>Семинар</option>
-        <option value="Конкурс" {% if request.POST.competitionType == 'Конкурс' %}selected{% endif %}>Конкурс</option>
-        <option value="Курс" {% if request.POST.competitionType == 'Курс' %}selected{% endif %}>Курс</option>
-        <option value="Вебинар" {% if request.POST.competitionType == 'Вебинар' %}selected{% endif %}>Вебинар</option>
-        <option value="Проект" {% if request.POST.competitionType == 'Проект' %}selected{% endif %}>Проект</option>
-        <option value="Стажировка" {% if request.POST.competitionType == 'Стажировка' %}selected{% endif %}>Стажировка</option>
-        <option value="Мастер-класс" {% if request.POST.competitionType == 'Мастер-класс' %}selected{% endif %}>Мастер-класс</option>
-        <option value="Пресс-конференция" {% if request.POST.competitionType == 'Пресс-конференция' %}selected{% endif %}>Пресс-конференция</option>
-    </select>
-</div>
+            <label for="competitionType">Вид конкурса:</label>
+            <select id="competitionType" name="competitionType">
+                <option value="Олимпиада" {% if achievement.competition_type == 'Олимпиада' %}selected{% endif %}>Олимпиада</option>
+                <option value="Конференция" {% if achievement.competition_type == 'Конференция' %}selected{% endif %}>Конференция</option>
+                <option value="Конкурс" {% if achievement.competition_type == 'Конкурс' %}selected{% endif %}>Конкурс</option>
+                <option value="Курс" {% if achievement.competition_type == 'Курс' %}selected{% endif %}>Курс</option>
+                <option value="Вебинар" {% if achievement.competition_type == 'Вебинар' %}selected{% endif %}>Вебинар</option>
+                <option value="Проект" {% if achievement.competition_type == 'Проект' %}selected{% endif %}>Проект</option>
+                <option value="Стажировка" {% if achievement.competition_type == 'Стажировка' %}selected{% endif %}>Стажировка</option>
+                <option value="Мастер-класс" {% if achievement.competition_type == 'Мастер-класс' %}selected{% endif %}>Мастер-класс</option>
+                <option value="Пресс-конференция" {% if achievement.competition_type == 'Пресс-конференция' %}selected{% endif %}>Пресс-конференция</option>
+            </select>
+        </div>
         <div class="form-group">
             <label for="workName">Название работы:</label>
-            <input type="text" id="workName" name="workName" value="{{ request.POST.workName }}" required></div>
+            <input type="text" id="workName" name="workName" value="{{ achievement.competition_name }}" required></div>
         <div class="form-group">
             <label for="documentType">Вид документа:</label>
             <select id="documentType" name="documentType">
-                <option value="Сертификат" {% if request.POST.documentType == 'Сертификат' %}selected{% endif %}>Сертификат</option>
-                <option value="Грамота" {% if request.POST.documentType == 'Грамота' %}selected{% endif %}>Грамота</option>
-                <option value="Диплом" {% if request.POST.documentType == 'Диплом' %}selected{% endif %}>Диплом</option>
-                <option value="Благодарность" {% if request.POST.documentType == 'Благодарность' %}selected{% endif %}>Благодарность</option>
-                <option value="Удостоверение" {% if request.POST.documentType == 'Удостоверение' %}selected{% endif %}>Удостоверение</option>
-                <option value="Справка" {% if request.POST.documentType == 'Справка' %}selected{% endif %}>Справка</option>
-                <option value="Статья" {% if request.POST.documentType == 'Статья' %}selected{% endif %}>Статья</option>
-                <option value="Медаль" {% if request.POST.documentType == 'Медаль' %}selected{% endif %}>Медаль</option>
-            </select>
+            <option value="Сертификат" {% if achievement.type_document == 'Сертификат' %}selected{% endif %}>Сертификат</option>
+            <option value="Грамота" {% if achievement.type_document == 'Грамота' %}selected{% endif %}>Грамота</option>
+            <option value="Диплом" {% if achievement.type_document == 'Диплом' %}selected{% endif %}>Диплом</option>
+            <option value="Благодарность" {% if achievement.type_document == 'Благодарность' %}selected{% endif %}>Благодарность</option>
+            <option value="Удостоверение" {% if achievement.type_document == 'Удостоверение' %}selected{% endif %}>Удостоверение</option>
+            <option value="Справка" {% if achievement.type_document == 'Справка' %}selected{% endif %}>Справка</option>
+            <option value="Статья" {% if achievement.type_document == 'Статья' %}selected{% endif %}>Статья</option>
+            <option value="Медаль" {% if achievement.type_document == 'Медаль' %}selected{% endif %}>Медаль</option>
+        </select>
+
         </div>
 
         <div class="form-group">
             <label for="eventDate">Дата проведения:</label>
-            <!--            <input type="date" id="eventDate" name="eventDate" class="datepicker" required>-->
             <input type="date" id="eventDate" name="eventDate" class="datepicker"
-                   value="{{ request.POST.eventDate|default_if_none:'' }}" required>
+                   value="{{ achievement.date }}" required>
         </div>
 
         <div class="form-group">
             <label for="position">Занятое место:</label>
             <select id="position" name="position">
-            <option value="Участник" {% if request.POST.position == 'Участник' %}selected{% endif %}>Участник</option>
-            <option value="Призёр" {% if request.POST.position == 'Призёр' %}selected{% endif %}>Призёр</option>
-            <option value="Победитель" {% if request.POST.position == 'Победитель' %}selected{% endif %}>Победитель</option>
-            </select>
+            <option value="Участник" {% if achievement.place == 'Участник' %}selected{% endif %}>Участник</option>
+            <option value="Призёр" {% if achievement.place == 'Призёр' %}selected{% endif %}>Призёр</option>
+            <option value="Победитель" {% if achievement.place == 'Победитель' %}selected{% endif %}>Победитель</option>
+        </select>
         </div>
         <div class="form-group">
             <label for="olympiadLevel">Уровень конкурса:</label>
             <select id="olympiadLevel" name="olympiadLevel">
-                <option value="Школьный" {% if request.POST.olympiadLevel == 'Школьный' %}selected{% endif %}>Школьный</option>
-                <option value="Региональный" {% if request.POST.olympiadLevel == 'Региональный' %}selected{% endif %}>Региональный</option>
-                <option value="Муниципальный" {% if request.POST.olympiadLevel == 'Муниципальный' %}selected{% endif %}>Муниципальный</option>
-                <option value="Федеральный" {% if request.POST.olympiadLevel == 'Федеральный' %}selected{% endif %}>Федеральный</option>
-                <option value="Международный" {% if request.POST.olympiadLevel == 'Международный' %}selected{% endif %}>Международный</option>
-            </select>
+            <option value="Школьный" {% if achievement.level_competition == 'Школьный' %}selected{% endif %}>Школьный</option>
+            <option value="Региональный" {% if achievement.level_competition == 'Региональный' %}selected{% endif %}>Региональный</option>
+            <option value="Муниципальный" {% if achievement.level_competition == 'Муниципальный' %}selected{% endif %}>Муниципальный</option>
+            <option value="Федеральный" {% if achievement.level_competition == 'Федеральный' %}selected{% endif %}>Федеральный</option>
+            <option value="Международный" {% if achievement.level_competition == 'Международный' %}selected{% endif %}>Международный</option>
+        </select>
         </div>
         <div class="form-group">
-    <label for="subject">Предмет:</label>
-    <select id="subject" name="subject">
-        <option value="Математика" {% if request.POST.subject == 'Математика' %}selected{% endif %}>Математика</option>
-        <option value="Русский язык" {% if request.POST.subject == 'Русский язык' %}selected{% endif %}>Русский язык</option>
-        <option value="Английский язык" {% if request.POST.subject == 'Английский язык' %}selected{% endif %}>Английский язык</option>
-        <option value="Литература" {% if request.POST.subject == 'Литература' %}selected{% endif %}>Литература</option>
-        <option value="Физика" {% if request.POST.subject == 'Физика' %}selected{% endif %}>Физика</option>
-        <option value="Биология" {% if request.POST.subject == 'Биология' %}selected{% endif %}>Биология</option>
-        <option value="География" {% if request.POST.subject == 'География' %}selected{% endif %}>География</option>
-        <option value="Физическая культура" {% if request.POST.subject == 'Физическая культура' %}selected{% endif %}>Физическая культура</option>
-        <option value="ОБЖ" {% if request.POST.subject == 'ОБЖ' %}selected{% endif %}>ОБЖ</option>
-        <option value="Химия" {% if request.POST.subject == 'Химия' %}selected{% endif %}>Химия</option>
-        <option value="Другое" {% if request.POST.subject == 'Другое' %}selected{% endif %}>Другое</option>
-    </select>
-</div>
+            <label for="subject">Предмет:</label>
+            <select id="subject" name="subject">
+            <option value="Математика" {% if achievement.subject == 'Математика' %}selected{% endif %}>Математика</option>
+            <option value="Русский язык" {% if achievement.subject == 'Русский язык' %}selected{% endif %}>Русский язык</option>
+            <option value="Английский язык" {% if achievement.subject == 'Английский язык' %}selected{% endif %}>Английский язык</option>
+            <option value="Литература" {% if achievement.subject == 'Литература' %}selected{% endif %}>Литература</option>
+            <option value="Физика" {% if achievement.subject == 'Физика' %}selected{% endif %}>Физика</option>
+            <option value="Биология" {% if achievement.subject == 'Биология' %}selected{% endif %}>Биология</option>
+            <option value="География" {% if achievement.subject == 'География' %}selected{% endif %}>География</option>
+            <option value="Физическая культура" {% if achievement.subject == 'Физическая культура' %}selected{% endif %}>Физическая культура</option>
+            <option value="ОБЖ" {% if achievement.subject == 'ОБЖ' %}selected{% endif %}>ОБЖ</option>
+            <option value="Химия" {% if achievement.subject == 'Химия' %}selected{% endif %}>Химия</option>
+            <option value="Другое" {% if achievement.subject == 'Другое' %}selected{% endif %}>Другое</option>
+        </select>
+
+        </div>
         <div class="form-group" id="scanarea">
-            <label for="scan">Загрузить скан:</label>
-            <input type="file" id="scan" name="scan" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.gif,.zip,.rar,.7z,.bmp,.ppt,.pptx" required>
+            <label for="scan">Изменить скан:</label>
+            <input type="file" id="scan" name="scan"
+                   accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.gif,.zip,.rar,.7z,.bmp,.ppt,.pptx" >
         </div>
 
 
-        <button type="submit" id="submit_button">Добавить достижение</button>
+        <button type="submit" id="submit_button">Изменить достижение</button>
     </form>
+    {% if achievement.file_format in "'.png', '.jpg', '.jpeg', '.gif'" %}
+       <a href="{{ scan_url }}" id="show_scan" target="_blank" class="button-link">Посмотреть выбранный скан</a> <!-- тут должно быть скачивание, но cancel by js-->
+    {% else %}
+        <label id="cantShowimg">Загруженный файл не позволяет отобразить его на сайте</label>
+        <a href="{{ scan_url }}" id="download_scan" class="button-link" download="{{ achievement.competition_name|urlencode }}.{{ achievement.file_format }}">Скачать скан</a>
+    {% endif %}
 </div>
 </body>
 </html>

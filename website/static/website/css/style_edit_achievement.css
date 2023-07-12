@@ -70,3 +70,12 @@ input[type="file"] {
     margin-bottom: 15px;
 }
 
+.button-link {
+    background-color: #4CAF50;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 12px 24px;
+    /*padding-top: 5px;*/
+    font-size: 18px;
+}

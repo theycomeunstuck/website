@@ -100,7 +100,7 @@ def add_user_achievement(request):
 
         #добавление достижения в бд
         _File = request.FILES['scan']
-        print("103,",request.FILES['scan'].name)
+        # print("103,",request.FILES['scan'].name)
         competition_name, _File_format, _Date = request.POST.get('workName'), str(_File).split(".")[-1], request.POST.get('eventDate')
         _Year, _Month, _Day = _Date.split("-")
         _Date = f'{_Day}.{_Month}.{_Year}'
@@ -132,4 +132,41 @@ def add_user_achievement(request):
         return f'Достижение не добавлено.\n{e}'
 
     # storage.child("/" + localId + "/" + key_achievement + "." + _File_format).put(_File, idToken)
+def fill_achievement_fields(request, key):
+    try:
+        localId = request.COOKIES['user_localId']
+        idToken = request.COOKIES['user_idToken']
+
+        achievements = db.child('users').child(localId).child('achievements').child(key).get()
+        data = achievements.val()
+
+        _Day, _Month, _Year = data['date'].split(".")
+        data['date'] = f'{_Year}-{_Month}-{_Day}'
+
+        # url = get_scan(request, key)
+        url = storage.child(f'{localId}/{key}.{data["file_format"]}').get_url(idToken)
+
+        return url, data
+    except Exception as e:
+        print(f'forms.py| 145| def fill_achievement_fields | !!!невозможно  заполнить поля\n{e}')
+        return f'Достижение не добавлено.\n{e}'
+
+def get_list_achievements(request):
+    #todo: если нет достижений то ченить вывести
+    try:
+        localId = request.COOKIES['user_localId']
+
+        achievements = db.child('users').child(localId).child('achievements').get()
+        _data, data = achievements.val(), {}
+        if len(_data) > 0:
+
+            for key in _data:
+                name = _data[key]['competition_name']
+                data[name] = key
+            return data
+        else:
+            print("forms.py | get_list_achievements | нет достижений нечего отобразить")
+    except Exception as e:
+        print(f'forms.py| 150| def get_list_achievements | !!!невозможно отобразить список достижений\n{e}')
+        return f'Достижение не добавлено.\n{e}'
 

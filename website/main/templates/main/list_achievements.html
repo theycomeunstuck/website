@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Achievements List</title>
+    <title>Список достиженийt</title>
 </head>
 <body>
     {% include 'templates/header.html' %}
-
-    <!-- Display the achievements -->
+<!--    TODO: ну сделай симпатично блять-->
     <h1>Список достижений</h1>
     <ul>
-        {% for achievement in achievements %}
+        {% for name, key in achievements.items %}
             <li>
-                <a href="{% url 'edit-achievement' achievement.id %}">{{ achievement.name }}</a>
+                <a href="{% url 'edit_achievement' key %}">{{ name }}</a>
             </li>
         {% endfor %}
     </ul>
