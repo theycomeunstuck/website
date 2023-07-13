@@ -128,6 +128,7 @@ def list_achievements(request):
     if does_user_auth(request) == "auth":
         return redirect('auth')
 
+    #todo: ну сделай блять симпатично css
     data = {'title': 'Добавление достижения', 'achievements': get_list_achievements(request)}
     return render(request, "main/list_achievements.html", data)
 
@@ -135,16 +136,24 @@ def list_achievements(request):
 # !list_achievements page end!
 
 def edit_achievement(request, key): #в куки передавать токен достижения
-    #todo: удалить достижение
     #todo: вернуться мб?
     url, achievement = fill_achievement_fields(request, key)
 
     data = {'title': 'Редактирование достижения',
             'achievement': achievement,
-            'scan_url': url} # todo: ??^?^? замена значений через другую функцию forms.ру
+            'scan_url': url}
 
+    if request.method == "POST":
+        if request.POST.get('form_type') == None:
+            data['message'] = edit_user_achievement(request, key)
 
-    # todo: при скачивании имя конкурса, а не key | решение, вроде как, через скачивание на сервер, переименование, а затем пользователю файл
+        else:
+            data['message'] = delete_user_achievement(request, key)
+
+        if data['message'] != 'Достижение успешно удалено!':
+            data['error_message'] = data['message']
+
+    # todo: !при скачивании имя конкурса, а не key | решение, вроде как, через скачивание на сервер, переименование, а затем пользователю файл
     return render(request, "main/edit_achievement.html", data)
 
 
@@ -154,7 +163,7 @@ def make_report(request):
 
 
 def logout(request):
-    response = HttpResponseRedirect("authorization")  # Переадресация на страницу "auth"
+    response = HttpResponseRedirect("authorization")
     response.delete_cookie('user_localId')
     response.delete_cookie('user_idToken')
     return response

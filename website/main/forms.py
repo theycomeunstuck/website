@@ -1,5 +1,5 @@
 from django import forms
-import pyrebase, urllib3, json
+import pyrebase, firebase_admin, urllib3, json, datetime, requests
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
@@ -114,7 +114,6 @@ def add_user_achievement(request):
                        "subject": request.POST.get('subject'),
                        'file_format': _File_format}
 
-
         db.child('users').child(localId).child('achievements').push(achievement)
 
         #добавление скана в бд (storage)
@@ -124,7 +123,7 @@ def add_user_achievement(request):
         for key in data3:
             name2 = data3[key]['competition_name']
             if name2.lower() == competition_name.lower():
-                storage.child("/" + localId + "/" + key + "." + _File_format).put(_File, idToken)
+                storage.child(f"/{localId}/{key}.{_File_format}").put(_File, idToken)
                 break
         return 'Достижение успешно добавлено!'
     except Exception as e:
@@ -132,24 +131,8 @@ def add_user_achievement(request):
         return f'Достижение не добавлено.\n{e}'
 
     # storage.child("/" + localId + "/" + key_achievement + "." + _File_format).put(_File, idToken)
-def fill_achievement_fields(request, key):
-    try:
-        localId = request.COOKIES['user_localId']
-        idToken = request.COOKIES['user_idToken']
 
-        achievements = db.child('users').child(localId).child('achievements').child(key).get()
-        data = achievements.val()
 
-        _Day, _Month, _Year = data['date'].split(".")
-        data['date'] = f'{_Year}-{_Month}-{_Day}'
-
-        # url = get_scan(request, key)
-        url = storage.child(f'{localId}/{key}.{data["file_format"]}').get_url(idToken)
-
-        return url, data
-    except Exception as e:
-        print(f'forms.py| 145| def fill_achievement_fields | !!!невозможно  заполнить поля\n{e}')
-        return f'Достижение не добавлено.\n{e}'
 
 def get_list_achievements(request):
     #todo: если нет достижений то ченить вывести
@@ -170,3 +153,108 @@ def get_list_achievements(request):
         print(f'forms.py| 150| def get_list_achievements | !!!невозможно отобразить список достижений\n{e}')
         return f'Достижение не добавлено.\n{e}'
 
+
+def fill_achievement_fields(request, key):
+    # try:
+    localId = request.COOKIES['user_localId']
+    idToken = request.COOKIES['user_idToken']
+
+    achievements = db.child('users').child(localId).child('achievements').child(key).get()
+    data = achievements.val()
+
+    _Day, _Month, _Year = data['date'].split(".")
+    data['date'] = f'{_Year}-{_Month}-{_Day}'
+
+    # url = get_scan(request, key)
+    url = storage.child(f'{localId}/{key}.{data["file_format"]}').get_url(idToken)
+    # url = f'https://firebasestorage.googleapis.com/v0/b/{firebaseConfig["projectId"]}.appspot.com/o/{localId}/{key}.{data["file_format"]}'
+
+    return url, data
+    # except Exception as e:
+    #     print(f'forms.py| 145| def fill_achievement_fields | !!!невозможно  заполнить поля\n\n{e}\n\n')
+    #     return f'Достижение не добавлено.\n{e}', ""
+
+def edit_user_achievement(request, key):
+    try:
+        localId = request.COOKIES['user_localId']
+        idToken = request.COOKIES['user_idToken']
+        achievements = db.child('users').child(localId).child('achievements').child(key).get()
+        data = achievements.val() #надо для удаления старого файла.
+
+        if 'scan' in request.FILES:
+            _File = request.FILES['scan']
+            _File_format = str(_File).split(".")[-1]
+        else:
+            _File_format = data['file_format']
+
+        _Date = request.POST.get('eventDate')
+        _Year, _Month, _Day = _Date.split("-")
+        _Date = f'{_Day}.{_Month}.{_Year}'
+        achievement = {"competition_type": request.POST.get('competitionType'),
+                       "competition_name": request.POST.get('workName'),
+                       "work_type": request.POST.get('workType'),
+                       "type_document": request.POST.get('documentType'),
+                       "date": _Date,
+                       "place": request.POST.get('position'),
+                       "level_competition": request.POST.get('olympiadLevel'),
+                       "subject": request.POST.get('subject'),
+                       'file_format': _File_format}
+
+        if 'scan' in request.FILES:
+
+            encoded_file_path = f'{localId}/{key}.{data["file_format"]}'.replace('/', '%2F')
+            url = f'https://firebasestorage.googleapis.com/v0/b/{firebaseConfig["storageBucket"]}/o/{encoded_file_path}?alt=media'
+            headers = {
+                'Authorization': f'Bearer {idToken}',
+                'Content-Type': 'application/json',
+            }
+            response = requests.delete(url, headers=headers)
+
+            response.raise_for_status()
+            if response.status_code == 204:
+                storage.child(f'/{localId}/{key}.{_File_format}').put(_File, idToken)
+            else:
+                print("response.status_code", response.status_code)
+                raise Exception
+
+
+        db.child('users').child(localId).child('achievements').child(key).update(achievement)
+
+        return 'Достижение успешно добавлено!'
+
+    except requests.exceptions.HTTPError as e:
+        print(f'forms.py| 238| def edit_user_achievement |HTTP| !!!достижение НЕ добавлено\n{e}')
+        return f'Достижение не добавлено.\nПроизошла ошибка HTTP: {e}'
+
+    except Exception as e:
+        print(f'forms.py| 211| def edit_user_achievement | !!!достижение НЕ добавлено\n{e}')
+        return f'Достижение не добавлено.\n{e}'
+
+def delete_user_achievement(request, key):
+    try:
+        localId = request.COOKIES['user_localId']
+        idToken = request.COOKIES['user_idToken']
+        achievements = db.child('users').child(localId).child('achievements').child(key).child('file_format').get()
+        file_format = achievements.val()
+
+        encoded_file_path = f'{localId}/{key}.{file_format}'.replace('/', '%2F')
+        url = f'https://firebasestorage.googleapis.com/v0/b/{firebaseConfig["storageBucket"]}/o/{encoded_file_path}?alt=media'
+        headers = {
+            'Authorization': f'Bearer {idToken}',
+            'Content-Type': 'application/json',
+        }
+        response = requests.delete(url, headers=headers)
+
+        db.child('users').child(localId).child('achievements').child(key).remove()
+        response.raise_for_status()
+
+        return 'Достижение успешно удалено!'
+
+    except requests.exceptions.HTTPError as e:
+        print(f'forms.py| 238| def delete_user_achievement |HTTP| !!!достижение НЕ добавлено\n{e}')
+        return f'Достижение удалено с ошибками.\nПроизошла ошибка HTTP: {e}'
+
+
+    except Exception as e:
+        print(f'forms.py| 211| def delete_user_achievement | !!!достижение НЕ добавлено\n{e}')
+        return f'Достижение не удалено.\n{e}'

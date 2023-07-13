@@ -98,11 +98,18 @@
         <button type="submit" id="submit_button">Изменить достижение</button>
     </form>
     {% if achievement.file_format in "'.png', '.jpg', '.jpeg', '.gif'" %}
-       <a href="{{ scan_url }}" id="show_scan" target="_blank" class="button-link">Посмотреть выбранный скан</a> <!-- тут должно быть скачивание, но cancel by js-->
+       <a href="{{ scan_url }}" id="show_scan" target="_blank" class="button-link">Посмотреть выбранный скан</a>
     {% else %}
         <label id="cantShowimg">Загруженный файл не позволяет отобразить его на сайте</label>
         <a href="{{ scan_url }}" id="download_scan" class="button-link" download="{{ achievement.competition_name|slugify }}.{{ achievement.file_format }}">Скачать скан</a>
     {% endif %}
+
+    <form method="POST" id="deleteAchievementForm">
+        {% csrf_token %}
+        <input type="hidden" name="form_type" value="delete">
+        <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить достижение?')">Удалить достижение</button>
+    </form>
+
 </div>
 </body>
 </html>
