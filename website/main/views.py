@@ -138,17 +138,19 @@ def edit_achievement(request, key): #в куки передавать токен
     #todo: удалить достижение
     #todo: вернуться мб?
     url, achievement = fill_achievement_fields(request, key)
-    print(f'url={url}\n')
-    print(achievement)
+
     data = {'title': 'Редактирование достижения',
             'achievement': achievement,
             'scan_url': url} # todo: ??^?^? замена значений через другую функцию forms.ру
 
+
+    # todo: при скачивании имя конкурса, а не key | решение, вроде как, через скачивание на сервер, переименование, а затем пользователю файл
     return render(request, "main/edit_achievement.html", data)
 
 
 def make_report(request):
     print('make_report views.py')
+
 
 
 def logout(request):
