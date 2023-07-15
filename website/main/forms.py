@@ -29,7 +29,6 @@ class LoginUserForm():
         password = POST.get('password')
         if email != "" and password != "":
             try:
-                print("forms.py (32) получение user -- авторизациЯ")
                 user = auth.sign_in_with_email_and_password(email, password)
                 return True
             except Exception as e:
@@ -49,7 +48,6 @@ class LoginUserForm():
         password = POST.get('password')
         try:
             user = auth.sign_in_with_email_and_password(email, password)
-            # user_data = json_user.val()
             return user
 
         except Exception as e:
@@ -72,6 +70,8 @@ class LoginUserForm():
 def does_user_auth(request):  # request.COOKIES
     if len(request.COOKIES) != 3 or len(request.COOKIES) < 3 or request.COOKIES == '{}':
         print(f'forms.py | 67 | redirect to auth')
+        #todo: проверка на то, что есть нужные куки. нет нужных куки - пока
+        #todo: выход со всех других сессий, если замена пароля
         return 'auth'
     # try:
     #     if not(request.COOKIES['user_localId'] in request.COOKIES) and not(request.COOKIES['user_idToken'] in request.COOKIES):
@@ -100,7 +100,6 @@ def add_user_achievement(request):
 
         #добавление достижения в бд
         _File = request.FILES['scan']
-        # print("103,",request.FILES['scan'].name)
         competition_name, _File_format, _Date = request.POST.get('workName'), str(_File).split(".")[-1], request.POST.get('eventDate')
         _Year, _Month, _Day = _Date.split("-")
         _Date = f'{_Day}.{_Month}.{_Year}'
@@ -135,7 +134,7 @@ def add_user_achievement(request):
 
 
 def get_list_achievements(request):
-    #todo: если нет достижений то ченить вывести
+    #todo: если нет достижений то ченить вывести/сделать это красиво (щас слабенько и мб не работает)
     try:
         localId = request.COOKIES['user_localId']
 
@@ -149,43 +148,45 @@ def get_list_achievements(request):
             return data
         else:
             print("forms.py | get_list_achievements | нет достижений нечего отобразить")
+            return f'У Вас нет достижений, доступных к отображению'
     except Exception as e:
         print(f'forms.py| 150| def get_list_achievements | !!!невозможно отобразить список достижений\n{e}')
-        return f'Достижение не добавлено.\n{e}'
+        return f'Невозможно отобразить достижения.\n{e}'
 
 
 def fill_achievement_fields(request, key):
-    # try:
-    localId = request.COOKIES['user_localId']
-    idToken = request.COOKIES['user_idToken']
+    try:
+        localId = request.COOKIES['user_localId']
+        idToken = request.COOKIES['user_idToken']
 
-    achievements = db.child('users').child(localId).child('achievements').child(key).get()
-    data = achievements.val()
+        achievements = db.child('users').child(localId).child('achievements').child(key).get()
+        data = achievements.val()
 
-    _Day, _Month, _Year = data['date'].split(".")
-    data['date'] = f'{_Year}-{_Month}-{_Day}'
+        _Day, _Month, _Year = data['date'].split(".")
+        data['date'] = f'{_Year}-{_Month}-{_Day}'
 
-    # url = get_scan(request, key)
-    url = storage.child(f'{localId}/{key}.{data["file_format"]}').get_url(idToken)
-    # url = f'https://firebasestorage.googleapis.com/v0/b/{firebaseConfig["projectId"]}.appspot.com/o/{localId}/{key}.{data["file_format"]}'
+        #тут имеется два метода вывода url. но, вероятно, нижний вариант лучше, если у firebase проблемки. он и используется
+        # url = storage.child(f'{localId}/{key}.{data["file_format"]}').get_url(idToken)
+        encoded_file_path = f'{localId}/{key}.{data["file_format"]}'.replace('/', '%2F')
+        url = f'https://firebasestorage.googleapis.com/v0/b/{firebaseConfig["storageBucket"]}/o/{encoded_file_path}?alt=media'
 
-    return url, data
-    # except Exception as e:
-    #     print(f'forms.py| 145| def fill_achievement_fields | !!!невозможно  заполнить поля\n\n{e}\n\n')
-    #     return f'Достижение не добавлено.\n{e}', ""
+        return url, data
+    except Exception as e:
+        print(f'forms.py| 145| def fill_achievement_fields | !!!невозможно  заполнить поля\n\n{e}\n\n')
+        return f'Достижение не добавлено.\n{e}', ""
 
 def edit_user_achievement(request, key):
     try:
         localId = request.COOKIES['user_localId']
         idToken = request.COOKIES['user_idToken']
-        achievements = db.child('users').child(localId).child('achievements').child(key).get()
-        data = achievements.val() #надо для удаления старого файла.
+        achievements = db.child('users').child(localId).child('achievements').child(key).child('file_format').get()
+        data = achievements.val() #для получения формата старого файла, на случай если scan пуст
 
         if 'scan' in request.FILES:
             _File = request.FILES['scan']
             _File_format = str(_File).split(".")[-1]
         else:
-            _File_format = data['file_format']
+            _File_format = data
 
         _Date = request.POST.get('eventDate')
         _Year, _Month, _Day = _Date.split("-")
@@ -202,7 +203,7 @@ def edit_user_achievement(request, key):
 
         if 'scan' in request.FILES:
 
-            encoded_file_path = f'{localId}/{key}.{data["file_format"]}'.replace('/', '%2F')
+            encoded_file_path = f'{localId}/{key}.{data}'.replace('/', '%2F')
             url = f'https://firebasestorage.googleapis.com/v0/b/{firebaseConfig["storageBucket"]}/o/{encoded_file_path}?alt=media'
             headers = {
                 'Authorization': f'Bearer {idToken}',
@@ -211,24 +212,21 @@ def edit_user_achievement(request, key):
             response = requests.delete(url, headers=headers)
 
             response.raise_for_status()
-            if response.status_code == 204:
-                storage.child(f'/{localId}/{key}.{_File_format}').put(_File, idToken)
+            if response.status_code == 404:
+                pass
             else:
-                print("response.status_code", response.status_code)
-                raise Exception
-
-
+                response.raise_for_status()
+            storage.child(f'/{localId}/{key}.{_File_format}').put(_File, idToken)
         db.child('users').child(localId).child('achievements').child(key).update(achievement)
-
-        return 'Достижение успешно добавлено!'
+        return 'Достижение успешно изменено!'
 
     except requests.exceptions.HTTPError as e:
-        print(f'forms.py| 238| def edit_user_achievement |HTTP| !!!достижение НЕ добавлено\n{e}')
-        return f'Достижение не добавлено.\nПроизошла ошибка HTTP: {e}'
+        print(f'forms.py| 224| def edit_user_achievement |HTTP| !!!достижение НЕ добавлено\n{e}')
+        return f'Достижение не изменено.\nПроизошла ошибка HTTP: {e}'
 
     except Exception as e:
-        print(f'forms.py| 211| def edit_user_achievement | !!!достижение НЕ добавлено\n{e}')
-        return f'Достижение не добавлено.\n{e}'
+        print(f'forms.py| 228| def edit_user_achievement | !!!достижение НЕ добавлено\n{e}')
+        return f'Достижение не изменено.\n{e}'
 
 def delete_user_achievement(request, key):
     try:
@@ -244,15 +242,17 @@ def delete_user_achievement(request, key):
             'Content-Type': 'application/json',
         }
         response = requests.delete(url, headers=headers)
-
+        if response.status_code == 404:
+            pass
+        else:
+            response.raise_for_status()
         db.child('users').child(localId).child('achievements').child(key).remove()
-        response.raise_for_status()
 
         return 'Достижение успешно удалено!'
 
     except requests.exceptions.HTTPError as e:
         print(f'forms.py| 238| def delete_user_achievement |HTTP| !!!достижение НЕ добавлено\n{e}')
-        return f'Достижение удалено с ошибками.\nПроизошла ошибка HTTP: {e}'
+        return f'Достижение не удалено.\nПроизошла ошибка HTTP: {e}'
 
 
     except Exception as e:

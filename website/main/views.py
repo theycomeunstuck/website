@@ -16,12 +16,12 @@ from .utils import *
 def homepage(request):
     return HttpResponseRedirect("/authorization")
     # return render(request, "main/homepage.html")
+    #todo: страница с приколами и гайд. ну типо визитная, но не визитка
 
 
 # auth page
 def authorization(request):
     if does_user_auth(request) == "auth":
-        print("22 views auth |views.py")
         data = {
             'title': 'Авторизация',
         }
@@ -36,14 +36,11 @@ def authorization(request):
                     'localId': user['localId'],
                     'idToken': user['idToken']
                 }
-                # print(data)
                 response = redirect('profile')
                 # response = redirect('/')
                 # response.set_cookie(name='data_user', value=data, max_age=259200)
-
                 response.set_cookie('user_localId', user_data['localId'], 259200)
                 response.set_cookie('user_idToken', user_data['idToken'], 259200)
-                # return redirect('profile')
                 return response
             else:
 
@@ -67,28 +64,19 @@ def profile(request):
     # if request.COOKIES == '{}':
     if does_user_auth(request) == "auth":
         return redirect('auth')
-        print("unlogged")
-    print("logged")
     for line in request.POST:
         if "button" in line:
             button_pressed = True
             name_button = line
 
     if not button_pressed:
-
         localId = request.COOKIES['user_localId']
-        # idToken = request.COOKIES['user_idToken']
-
         data['value_name'], data['value_surname'], data['value_letter'], data['value_class'], data[
             'value_countAchievements'] = LoginUserForm().fill_fields(localId)
 
-
-
     else:
-        print(91)
         profile_buttons_handler(request)
 
-    # print(request.POST.get())
     return render(request, "main/profile.html", data)  # , data)
 
 
@@ -135,8 +123,11 @@ def list_achievements(request):
 
 # !list_achievements page end!
 
-def edit_achievement(request, key): #в куки передавать токен достижения
-    #todo: вернуться мб?
+def edit_achievement(request, key):
+    if does_user_auth(request) == "auth":
+        return redirect('auth')
+
+    #todo: кнопку вернуться мб?
     url, achievement = fill_achievement_fields(request, key)
 
     data = {'title': 'Редактирование достижения',
@@ -149,15 +140,19 @@ def edit_achievement(request, key): #в куки передавать токен
 
         else:
             data['message'] = delete_user_achievement(request, key)
+        print(data['message'])
 
-        if data['message'] != 'Достижение успешно удалено!':
-            data['error_message'] = data['message']
+        if data['message'] != 'Достижение успешно удалено!' and data['message'] != "Достижение успешно изменено!":
+                data['error_message'] = data['message']
 
     # todo: !при скачивании имя конкурса, а не key | решение, вроде как, через скачивание на сервер, переименование, а затем пользователю файл
+    # todo: !ещё бы картиночки на своём сайте показывать (в url типо), а не на клауд кидать
+    # todo: * обязательно поработать над css, потому что сейчас кнопки друг на друге и при новом label вообще всё плохо!
     return render(request, "main/edit_achievement.html", data)
 
 
 def make_report(request):
+    #todo: сделать make_report
     print('make_report views.py')
 
 
@@ -168,4 +163,6 @@ def logout(request):
     response.delete_cookie('user_idToken')
     return response
 
-
+# todo: часть учителя
+# todo: часть админа
+# todo: смотри тг favorite
