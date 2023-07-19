@@ -44,24 +44,13 @@
     margin-right: 15px; /* Adjust the margin as needed */
 }
 
-/*.profile-actions a {*/
-/*    text-decoration: none;*/
-/*    color: #333;*/
-/*    !*margin-right: 40px;*!*/
-/*    margin-right: 15%;*/
-/*    align-items: ;*/
-/*}*/
 
 
-.icon_logout {
-    /*fill:black;*/
-    /*transform: translate(15%, -65%);*/
+.icon_logout { /* todo: сделать иконки в header*/
     display: inline-block;
-    /*height: 100%;*/
-    /*width: 100%;*/
     margin-right: 5%;
-
 }
+
 
 .content {
     /*margin-top: 250px;*/
