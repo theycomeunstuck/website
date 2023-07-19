@@ -117,7 +117,7 @@ def list_achievements(request):
         return redirect('auth')
 
     #todo: ну сделай блять симпатично css
-    data = {'title': 'Добавление достижения', 'achievements': get_list_achievements(request)}
+    data = {'title': 'Список достижений', 'achievements': get_list_achievements(request)}
     return render(request, "main/list_achievements.html", data)
 
 

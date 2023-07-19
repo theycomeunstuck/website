@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Список достиженийt</title>
+    {% load static %}
+    <link rel="icon" href="{% static 'website/img/favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'website/css/style_list_achievements.css' %}">
 </head>
 <body>
-    {% include 'templates/header.html' %}
-    <h1>Список достижений</h1>
+{% include 'templates/header.html' %}
+<div>
+    <h1 class="label_list_achievements">Список достижений</h1>
+</div>
+<div class="container">
     <ul>
         {% for name, key in achievements.items %}
-            <li>
-                <a href="{% url 'edit_achievement' key %}">{{ name }}</a>
-            </li>
+        <li class="achievement-field">
+            <a class="achievement-link" href="{% url 'edit_achievement' key %}">{{ name }}</a>
+        </li>
         {% endfor %}
     </ul>
+</div>
 </body>
 </html>

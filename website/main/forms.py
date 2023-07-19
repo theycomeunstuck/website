@@ -141,7 +141,6 @@ def get_list_achievements(request):
         achievements = db.child('users').child(localId).child('achievements').get()
         _data, data = achievements.val(), {}
         if len(_data) > 0:
-
             for key in _data:
                 name = _data[key]['competition_name']
                 data[name] = key
