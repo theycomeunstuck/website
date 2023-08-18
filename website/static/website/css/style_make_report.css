@@ -59,14 +59,26 @@ button {
     margin-bottom: 15px;
 }
 
-
-
-
-input[type="file"] {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
+.selected-values {
     margin-top: 5px;
-    margin-bottom: 15px;
+    color: #888;
+    font-size: 14px;
 }
 
+.chosen-container-multi .chosen-choices .search-choice {
+    background-color: #f0f0f0; /* Цвет выбранных опций */
+    color: #333; /* Цвет текста для выбранных опций */
+}
+
+.chosen-container-multi .chosen-choices .search-choice-focus {
+    background-color: #e0e0e0; /* Цвет фона для подсвеченной выбранной опции */
+}
+
+.chosen-container-multi .chosen-choices .search-choice .search-choice-close {
+    margin-top: 4px;
+    margin-right: 4px;
+}
+
+.chosen-container-multi .chosen-results li.highlighted {
+    background-color: #e0e0e0; /* Цвет фона для подсвеченной не выбранной опции */
+}

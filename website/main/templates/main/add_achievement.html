@@ -78,7 +78,7 @@
                 <option value="Международный" {% if request.POST.olympiadLevel == 'Международный' %}selected{% endif %}>Международный</option>
             </select>
         </div>
-        <div class="form-group">
+    <div class="form-group">
     <label for="subject">Предмет:</label>
     <select id="subject" name="subject">
         <option value="Математика" {% if request.POST.subject == 'Математика' %}selected{% endif %}>Математика</option>
@@ -91,7 +91,9 @@
         <option value="Физическая культура" {% if request.POST.subject == 'Физическая культура' %}selected{% endif %}>Физическая культура</option>
         <option value="ОБЖ" {% if request.POST.subject == 'ОБЖ' %}selected{% endif %}>ОБЖ</option>
         <option value="Химия" {% if request.POST.subject == 'Химия' %}selected{% endif %}>Химия</option>
-        <option value="Другое" {% if request.POST.subject == 'Другое' %}selected{% endif %}>Другое</option>
+        <option value="Химия" {% if request.POST.subject == 'Обществознание' %}selected{% endif %}>Обществознание</option>
+        <option value="Химия" {% if request.POST.subject == 'История' %}selected{% endif %}>История</option>
+        <option value="Другое" {% if request.POST.subject == 'Другой' %}selected{% endif %}>Другой</option>
     </select>
 </div>
         <div class="form-group" id="scanarea">

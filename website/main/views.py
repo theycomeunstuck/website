@@ -154,7 +154,8 @@ def edit_achievement(request, key):
 def make_report(request):
     #todo: сделать make_report
     print('make_report views.py')
-
+    data = {'title': 'Формирование отчёта'}
+    return render(request, "main/make_report.html", data)
 
 
 def logout(request):

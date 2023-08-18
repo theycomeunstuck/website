@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <link rel="icon" href="{% static 'website/img/favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'website/css/style_make_report.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">
+    <!--    <link rel="stylesheet" href="{% static 'website/css/public/style_notification.css' %}">-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+    <script src="{% static 'website/js/js_make_report.js' %}"></script>
+
+</head>
+<body>
+
+{% include 'templates/header.html' %}
+{% include 'templates/notification.html' %}
+
+
+<div class="content">
+    <h1>Создание отчёта</h1>
+<!--    todo: rename post ID-->
+    <form method="POST" id="reportForm" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="competitionTypes">Виды конкурсов:</label>
+            <select id="competitionTypes" name="competitionTypes" multiple class="chosen-select">
+            <option value="Любые" selected>Любые</option> <!--    todo: везде сделать не выбрано -->
+            <option value="Олимпиада">Олимпиада</option>
+            <option value="Конференция">Конференция</option>
+            <option value="Фестиваль">Фестиваль</option>
+            <option value="Семинар">Семинар</option>
+            <option value="Конкурс">Конкурс</option>
+            <option value="Курс">Курс</option>
+            <option value="Вебинар">Вебинар</option>
+            <option value="Проект">Проект</option>
+            <option value="Стажировка">Стажировка</option>
+            <option value="Мастер-класс">Мастер-класс</option>
+            <option value="Пресс-конференция">Пресс-конференция</option>
+            </select>
+            <div class="selected-values"></div>
+        </div>
+        <div class="form-group">
+            <label for="documentType">Виды документов:</label>
+            <select id="documentType" name="documentType">
+            <option value="Сертификат">Сертификат</option>
+            <option value="Грамота">Грамота</option>
+            <option value="Диплом">Диплом</option>
+            <option value="Благодарность">Благодарность</option>
+            <option value="Удостоверение">Удостоверение</option>
+            <option value="Справка">Справка</option>
+            <option value="Статья">Статья</option>
+            <option value="Медаль">Медаль</option>
+            </select>
+        </div>
+<!--        todo: валидация на сервере, что start раньше, чем end  -->
+        <div class="form-group">
+            <label for="eventDate">Начальная дата проведения:</label>
+            <input type="date" id="eventDate" name="startDate" class="datepicker"
+                   value="" required>
+        </div>
+
+         <div class="form-group">
+            <label for="endDate">Конечная дата проведения:</label>
+            <input type="date" id="endDate" name="endDate" class="datepicker" required>
+        </div>
+
+<!--        -->
+        <div class="form-group">
+            <label for="position">Занятые места:</label>
+            <select id="position" name="position">
+            <option value="Участник">Участник</option>
+            <option value="Призёр">Призёр</option>
+            <option value="Победитель">Победитель</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="olympiadLevel">Уровени конкурсов:</label>
+            <select id="olympiadLevel" name="olympiadLevel">
+            <option value="Школьный">Школьный</option>
+            <option value="Региональный">Региональный</option>
+            <option value="Муниципальный">Муниципальный</option>
+            <option value="Федеральный">Федеральный</option>
+            <option value="Международный">Международный</option>
+            </select>
+        </div>
+        <div class="form-group">
+        <label for="subject">Предметы:</label>
+        <select id="subject" name="subject">
+            <option value="Математика">Математика</option>
+            <option value="Русский язык">Русский язык</option>
+            <option value="Английский язык">Английский язык</option>
+            <option value="Литература">Литература</option>
+            <option value="Физика">Физика</option>
+            <option value="Биология">Биология</option>
+            <option value="География">География</option>
+            <option value="Физическая культура">Физическая культура</option>
+            <option value="ОБЖ">ОБЖ</option>
+            <option value="Химия">Химия</option>
+            <option value="Обществознание">Обществознание</option>
+            <option value="История">История</option>
+            <option value="Другой">Другой</option>
+            <select/>
+        </div>
+
+        <div class="form-group">
+            <label for="downloadScans">Скачать сканы:</label>
+            <input type="checkbox" id="downloadScans" name="downloadScans">
+        </div>
+
+        <button type="submit" id="generateReportButton">Сформировать отчёт</button>
+    </form>
+</div>
