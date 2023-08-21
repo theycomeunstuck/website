@@ -3,6 +3,7 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
+    flex-direction: column; /* mb trash*/
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -59,26 +60,23 @@ button {
     margin-bottom: 15px;
 }
 
-.selected-values {
-    margin-top: 5px;
+.selected-values { /* todo: не адаптивная залупа */
+    margin-bottom: 24px;
     color: #888;
     font-size: 14px;
 }
 
+
 .chosen-container-multi .chosen-choices .search-choice {
     background-color: #f0f0f0; /* Цвет выбранных опций */
     color: #333; /* Цвет текста для выбранных опций */
+    margin-top: 6px;
+    margin-right: 6px;
 }
 
 .chosen-container-multi .chosen-choices .search-choice-focus {
     background-color: #e0e0e0; /* Цвет фона для подсвеченной выбранной опции */
 }
-
-.chosen-container-multi .chosen-choices .search-choice .search-choice-close {
-    margin-top: 4px;
-    margin-right: 4px;
-}
-
 .chosen-container-multi .chosen-results li.highlighted {
     background-color: #e0e0e0; /* Цвет фона для подсвеченной не выбранной опции */
 }

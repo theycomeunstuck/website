@@ -257,3 +257,21 @@ def delete_user_achievement(request, key):
     except Exception as e:
         print(f'forms.py| 211| def delete_user_achievement | !!!достижение НЕ добавлено\n{e}')
         return f'Достижение не удалено.\n{e}'
+
+def validate_date(startDate, endDate):
+    #если в return 2 ответа даты и даты, то ок норм а если один ответ норм а другой пуст то  шлём
+    _StartYear, _StartMonth, _StartDay = map(int, startDate.split("-"))
+    _EndYear, _EndMonth, _EndDay = map(int, endDate.split("-"))
+
+    if (_StartYear, _StartMonth, _StartDay) <= (_EndYear, _EndMonth, _EndDay):
+        print("Начальная дата раньше или равна конечной дате")
+        return " "
+    else:
+        print("270 forms Начальная дата позже конечной даты")
+        return None
+
+# startDate, endDate = f'{_StartDay}.{_StartMonth}.{_StartYear}', f'{_EndDay}.{_EndMonth}.{_EndYear}'
+
+def generate_report(request):
+    pass
+

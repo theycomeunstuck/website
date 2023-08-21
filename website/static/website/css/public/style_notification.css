@@ -1,8 +1,19 @@
+/*.notification {*/
+/*    padding: 20px;*/
+/*    border-radius: 5px;*/
+/*    font-size: 16px;*/
+/*    z-index: 9999;*/
+/*    display: none;*/
+/*    text-align: center;*/
+/*    transform: scale(1.1);*/
+/*    animation: showNotification 0.5s ease;*/
+/*}*/
+
 .notification {
+    /*todo: сделать текст чуть выше, чем кнопочка. и цвет у кнопочки изменить https://imgur.com/a/jciemnT*/
     position: absolute;
     top: 50%;
     left: 50%;
-    /*transform: translate(-50%, -50%);*/
     padding: 20px;
     border-radius: 5px;
     background-color: #2ecc71;
@@ -26,12 +37,36 @@
     }
 }
 
+@keyframes hideNotification {
+    from {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+}
+
 .success {
     background-color: #2ecc71;
 }
 
 .error {
     background-color: #e74c3c;
+}
+
+.warn {
+
+    background-color: #f39c12;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    /* todo: вот в этих двух хуйня и надо подкорректировать чтобы warn нормально вылетал. сейчас некорректные размеры https://imgur.com/a/EepzoKg*/
+    top: 90%;
+    left: 90%;
+        /*вот в этих двух хуйня и надо подкорректировать чтобы warn нормально вылеатл*/
+
 }
 
 #ok-button {

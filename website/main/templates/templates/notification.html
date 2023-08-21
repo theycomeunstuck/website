@@ -2,34 +2,51 @@
 <html>
 <head>
     <title>Успех!</title>
-        {% load static %}
-
+    {% load static %}
     <link rel="stylesheet" href="{% static 'website/css/public/style_notification.css' %}">
-
 </head>
 <body>
 {% if error_message %}
 <div id="notification" class="notification error">
     <p>{{ error_message }}</p>
-    <button id="ok-button">OK</button>
+    <button class="ok-button">OK</button>
 </div>
 {% elif message %}
-<div id="notification" class="notification success">
+<div id="notification" class="notification message">
     <p>{{ message }}</p>
-    <button id="ok-button">OK</button>
+    <button class="ok-button">OK</button>
+</div>
+{% elif warn_message %}
+<div id="warnNotification" class="notification warn">
+    <p>{{ warn_message }}</p>
 </div>
 {% endif %}
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var notification = document.getElementById('notification');
+        var warnNotification = document.getElementById('warnNotification');
+        // var warnNotification = document.querySelector('#notification.notification.warn');
         var okButton = document.getElementById('ok-button');
-        if (notification) {
+
+        if (warnNotification) {
+            warnNotification.style.display = 'block';
+            function hideNotification(element) {
+            if (element) {
+                element.style.animation = 'hideNotification 0.5s ease';
+                setTimeout(function () {
+                    element.style.display = 'none';
+                }, 500);}}
+            setTimeout(function () {
+                hideNotification(warnNotification);
+            }, 7500);
+        }
+
+        else if (notification) {
             notification.style.display = 'block';
             function redirectToProfile() {
                 window.location.href = '/profile';
             }
-
             setTimeout(redirectToProfile, 10000);
             okButton.addEventListener('click', redirectToProfile);
         }

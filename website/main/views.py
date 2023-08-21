@@ -96,6 +96,7 @@ def profile_buttons_handler(request):
 
 # add_achievement page
 def add_achievement(request):
+    #todo: анимация загрузки (кружок как видео грузится), пока файл не заupload`идтся
     data = {'title':'Добавление достижения'}
     if does_user_auth(request) == "auth":
         return redirect('auth')
@@ -155,6 +156,16 @@ def make_report(request):
     #todo: сделать make_report
     print('make_report views.py')
     data = {'title': 'Формирование отчёта'}
+    print(" request.POST.get('startDate')",  request.POST.get('startDate'))
+    _startDate = request.POST.get('startDate')
+    if _startDate != None:
+        if validate_date(_startDate, request.POST.get('endDate')) == None:
+            data['warn_message'] = "Начальная дата позже конечной даты"
+            return render(request, "main/make_report.html", data)
+        else:
+            generate_report(request)
+
+
     return render(request, "main/make_report.html", data)
 
 
@@ -167,3 +178,4 @@ def logout(request):
 # todo: часть учителя
 # todo: часть админа
 # todo: смотри тг favorite
+# todo: сделать красивый выбор в make_report (smthing like this https://codepen.io/maggiben/pen/BapEGv)
