@@ -24,8 +24,8 @@
         {% csrf_token %}
 
         <div class="form-group">
-            <label for="competitionTypes">Виды конкурсов:</label>
-            <select id="competitionTypes" name="competitionTypes" multiple class="chosen-select">
+            <label for="competitionType">Виды конкурсов:</label>
+            <select id="competitionType" name="competitionType" multiple required class="chosen-select">
             <option value="Любые" selected>Любые</option> <!--    todo: везде сделать не выбрано -->
             <option value="Олимпиада">Олимпиада</option>
             <option value="Конференция">Конференция</option>

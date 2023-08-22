@@ -273,5 +273,45 @@ def validate_date(startDate, endDate):
 # startDate, endDate = f'{_StartDay}.{_StartMonth}.{_StartYear}', f'{_EndDay}.{_EndMonth}.{_EndYear}'
 
 def generate_report(request):
+    try:
+        localId = request.COOKIES['user_localId']
+        idToken = request.COOKIES['user_idToken']
+
+        competitionType = request.POST.getlist("competitionType")
+        documentType = request.POST.get("documentType")
+        startDate = request.POST.get("startDate")
+        endDate = request.POST.get("endDate")
+        position = request.POST.get("position")
+        olympiadLevel = request.POST.get("olympiadLevel")
+        subject = request.POST.get("subject")
+        downloadScans = request.POST.get("downloadScans") #False == None | True = "on"
+        print(f'downloadScans: {downloadScans}')
+        print(f'competitionType: {competitionType}')
+    #
+    #     achievement = {"competition_type": request.POST.get('competitionTypes'),
+    #                    "work_type": request.POST.get('workType'),
+    #                    "type_document": request.POST.get('documentType'),
+    #                    "date": _Date,
+    #                    "place": request.POST.get('position'),
+    #                    "level_competition": request.POST.get('olympiadLevel'),
+    #                    "subject": request.POST.get('subject'),
+    #                    'file_format': _File_format}
+    #
+    #     db.child('users').child(localId).child('achievements').push(achievement)
+    #
+    #     # добавление скана в бд (storage)
+    #     achievements = db.child('users').child(localId).child('achievements').get()
+    #     data3 = achievements.val()
+    #
+    #     for key in data3:
+    #         name2 = data3[key]['competition_name']
+    #         if name2.lower() == competition_name.lower():
+    #             storage.child(f"/{localId}/{key}.{_File_format}").put(_File, idToken)
+    #             break
+    #     return 'Достижение успешно добавлено!'
+    except Exception as e:
+        print(f'forms.py| def generate_report | line 312|  !!!отчёт не сформирован\n{e}')
+        return f'Отчёт не сформирован.\n{e}'
+
     pass
 

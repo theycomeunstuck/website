@@ -161,6 +161,7 @@ def make_report(request):
     if _startDate != None:
         if validate_date(_startDate, request.POST.get('endDate')) == None:
             data['warn_message'] = "Начальная дата позже конечной даты"
+            # функция на todo: заполнять то, что заполнено, если дата кривая/пойти тут через selected (?)
             return render(request, "main/make_report.html", data)
         else:
             generate_report(request)
