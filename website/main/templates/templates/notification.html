@@ -9,12 +9,12 @@
 {% if error_message %}
 <div id="notification" class="notification error">
     <p>{{ error_message }}</p>
-    <button class="ok-button">OK</button>
+    <button id="ok-button" class="ok-button">OK</button>
 </div>
 {% elif message %}
 <div id="notification" class="notification message">
     <p>{{ message }}</p>
-    <button class="ok-button">OK</button>
+    <button id="ok-button" class="ok-button">OK</button>
 </div>
 {% elif warn_message %}
 <div id="warnNotification" class="notification warn">
@@ -46,7 +46,8 @@
             function redirectToProfile() {
                 window.location.href = '/profile';
             }
-            setTimeout(redirectToProfile, 10000);
+            setTimeout(redirectToProfile, 1000000);
+            // setTimeout(redirectToProfile, 10000);
             okButton.addEventListener('click', redirectToProfile);
         }
     });
