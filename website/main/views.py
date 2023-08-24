@@ -157,9 +157,7 @@ def make_report(request):
         return redirect('auth')
 
     #todo: сделать make_report
-    print('make_report views.py')
     data = {'title': 'Формирование отчёта'}
-    print(" request.POST.get('startDate')",  request.POST.get('startDate'))
     _startDate = request.POST.get('startDate')
     if _startDate != None:
         if validate_date(_startDate, request.POST.get('endDate')) == None:
@@ -167,10 +165,10 @@ def make_report(request):
             # функция на todo: заполнять то, что заполнено, если дата кривая/пойти тут через selected (?)
             return render(request, "main/make_report.html", data)
         else:
-            name, dirname = generate_report(request) #архив с достижениями и название архива
+            name, dirname = generate_report(request) #название архива и путь до него / нет результата и варн мессаге
             print(f"file name: {name}")
             if name == "Нет результатов":
-                data['warn_message'] = f'По заданным фильтрам не были найдены достижения'
+                data['warn_message'] = f'{dirname}'
                 return render(request, "main/make_report.html", data)
 
             elif request.POST.get("downloadScans") != None: #т.е. выбран

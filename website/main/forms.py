@@ -287,86 +287,81 @@ def generate_report(request):
     subject = request.POST.get("subject")
     downloadScans = request.POST.get("downloadScans") #False == None | True = "on"
     _isEmpty, name, doc, paragraph = True, f'Отчёт {startDate} — {endDate}', "", ""
-    _Achievements = db.child("users").child(localId).child("achievements").get()
-    achievements = _Achievements.val()
+    achievements = db.child("users").child(localId).child("achievements").get().val()
     startDate = datetime.datetime.strptime(startDate, "%Y.%m.%d").date()
     endDate = datetime.datetime.strptime(endDate, "%Y.%m.%d").date()
 
 
     # print(achievements, "\n\n\n")
-    for key in achievements:
-        print("hi")
-        name_comp = achievements[key]['competition_name'] #Названике работы
-        type_comp = achievements[key]['competition_type'] #Вид конкурса
-        level_comp = achievements[key]["level_competition"] #Уровень конкурса
-        position_comp = achievements[key]["place"] #Занятое место
-        subject_comp = achievements[key]["subject"] #Предметы
-        workType_comp = achievements[key]["work_type"] #Вид работы (Решение задач, выступление)
-        docType_comp = achievements[key]["type_document"] #Вид документа
-        compDate = datetime.datetime.strptime(achievements[key]['date'], "%d.%m.%Y").date()
-        print(f'{achievements[key]}\n')
-        if startDate <= compDate <= endDate: #todo: сделать мультивыбор в фильтре, а затем убрать |(     or XXX_comp == XXX)
-        #     if type_comp in competitionType or "Любые" in competitionType or (type_comp == competitionType):
-        #         if workType_comp == workType or "Любые" in workType or (workType_comp == workType):
-        #             if docType_comp in documentType or "Любые" in documentType or (docType_comp == documentType):
-        #                 if level_comp in olympiadLevel or "Любые" in olympiadLevel or (level_comp == olympiadLevel):
-        #                     if position_comp in position or "Любые" in position or (position_comp == position):
-        #                         if subject_comp == subject or "Любые" in subject or (subject_comp == subject) or (subject_comp == "Другое" and subject == "Другой"): #todo: костыльебауный
+    if achievements:
+        for key in achievements: #todo: НАПИСАТЬ ХУЙНЮ КОТОРАЯ ОЧИСТИТ ОТ АЧИВОК С КРИВОЙ ДАТОЙ (YMD) И СЛИШКМО МАЛЕНЬКИМИ/БОЛЬШИМИ НУ ТИПО КАК НЕГРОВ СДЕЛАТЬ
+            print("hi")
+            name_comp = achievements[key]['competition_name'] #Названике работы
+            type_comp = achievements[key]['competition_type'] #Вид конкурса
+            level_comp = achievements[key]["level_competition"] #Уровень конкурса
+            position_comp = achievements[key]["place"] #Занятое место
+            subject_comp = achievements[key]["subject"] #Предметы
+            workType_comp = achievements[key]["work_type"] #Вид работы (Решение задач, выступление)
+            docType_comp = achievements[key]["type_document"] #Вид документа
+            compDate = datetime.datetime.strptime(achievements[key]['date'], "%d.%m.%Y").date()
+            print(f'{achievements[key]}\n')
+            if startDate <= compDate <= endDate: #todo: сделать мультивыбор в фильтре, а затем убрать |(     or XXX_comp == XXX)
+            #     if type_comp in competitionType or "Любые" in competitionType or (type_comp == competitionType):
+            #         if workType_comp == workType or "Любые" in workType or (workType_comp == workType):
+            #             if docType_comp in documentType or "Любые" in documentType or (docType_comp == documentType):
+            #                 if level_comp in olympiadLevel or "Любые" in olympiadLevel or (level_comp == olympiadLevel):
+            #                     if position_comp in position or "Любые" in position or (position_comp == position):
+            #                         if subject_comp == subject or "Любые" in subject or (subject_comp == subject) or (subject_comp == "Другое" and subject == "Другой"): #todo: костыльебауный
 
-            print("316 forms.py")
-            if _isEmpty:
-                doc = docx.Document()
-                paragraph = doc.add_paragraph()
-                _isEmpty = False
+                if _isEmpty:
+                    doc = docx.Document()
+                    paragraph = doc.add_paragraph()
+                    _isEmpty = False
 
-            paragraph.add_run(f'Название конкурса: {name_comp}\n')
-            paragraph.add_run(f'Вид конкурса: {type_comp}\n')
-            paragraph.add_run(f'Дата проведения конкурса: {compDate}\n')
-            paragraph.add_run(f'Занятое место: {position_comp}\n')
-            paragraph.add_run(f'Уровень конкурса: {level_comp}\n')
-            paragraph.add_run(f'Предмет конкурса: {subject_comp}\n')
-            paragraph.add_run(f'Тип работы: {workType_comp}\n')
-            paragraph.add_run(f'Тип документа: {docType_comp}\n')
-            paragraph.add_run('\n')
-            paragraph.add_run('\n')
-            if downloadScans != None:
-                print("332 forms.py")
-                file_format = achievements[key]["file_format"]
-                encoded_file_path = f'{localId}/{key}.{file_format}'.replace('/', '%2F')
-                url = f'https://firebasestorage.googleapis.com/v0/b/{firebaseConfig["storageBucket"]}/o/{encoded_file_path}?alt=media'
-                response = requests.get(url)
-                print(f"337 forms.py. {response.status_code}")
+                paragraph.add_run(f'Название конкурса: {name_comp}\n')
+                paragraph.add_run(f'Вид конкурса: {type_comp}\n')
+                paragraph.add_run(f'Дата проведения конкурса: {compDate}\n')
+                paragraph.add_run(f'Занятое место: {position_comp}\n')
+                paragraph.add_run(f'Уровень конкурса: {level_comp}\n')
+                paragraph.add_run(f'Предмет конкурса: {subject_comp}\n')
+                paragraph.add_run(f'Тип работы: {workType_comp}\n')
+                paragraph.add_run(f'Тип документа: {docType_comp}\n')
+                paragraph.add_run('\n')
+                paragraph.add_run('\n')
+                if downloadScans != None:
+                    file_format = achievements[key]["file_format"]
+                    encoded_file_path = f'{localId}/{key}.{file_format}'.replace('/', '%2F')
+                    url = f'https://firebasestorage.googleapis.com/v0/b/{firebaseConfig["storageBucket"]}/o/{encoded_file_path}?alt=media'
+                    response = requests.get(url)
+                    if response.status_code == 200:
+                        file_path = os.path.join(f'{key}.{file_format}')
+                        with open(file_path, 'wb') as file:
+                            file.write(response.content)
+                        with zipfile.ZipFile(f'{name}.zip', 'a', zipfile.ZIP_DEFLATED) as zipf:
+                            zipf.write(file_path, arcname=f'{name_comp}/{name_comp}.{file_format}')
 
-                if response.status_code == 200:
-                    file_path = os.path.join(f'{key}.{file_format}')
-                    with open(file_path, 'wb') as file:
-                        file.write(response.content)
+                        os.remove(file_path)
 
-                    with zipfile.ZipFile(f'{name}.zip', 'w', zipfile.ZIP_DEFLATED) as zipf:
-                        zipf.write(file_path, arcname=f'{name_comp}/{key}.{file_format}')
-
-                    print(f"346 forms.py. ")
-
-                    # os.remove(file_path)
-
-                else:
-                        pass #todo: break point. warn message, о косяке/попробовать пропустить хуйню эту
+                    else:
+                            pass #todo: break point. warn message, о косяке/попробовать пропустить хуйню эту
 
 
         if _isEmpty:
             #todo: (сделано?) не сохранять пользователю, а прямо на сайте сказать, что по заданным параметрам нет достижений.
-            #todo: (в процессе) также, если у пользователя нет достижений, то в лоб ему тыкнуть, что у него их нет через алёрт. а эту штуку убрать
             name = "Нет результатов"
-            return name, ""
+            return name, f'По заданным фильтрам не были найдены достижения'
 
         #todo: запись сколько всего достижений с такими параметрами и какие фильтры были выбраны
         doc.save(f'{name}.docx')
         if downloadScans != None:
-            with zipfile.ZipFile(f'{name}.zip', 'w', zipfile.ZIP_DEFLATED) as zipf:
+            with zipfile.ZipFile(f'{name}.zip', 'a', zipfile.ZIP_DEFLATED) as zipf:
                 zipf.write(f'{name}.docx', f'{name}.docx')
+
         return name, f'{key}'
-
-
+    else:
+        # todo: (в процессе) также, если у пользователя нет достижений, то в лоб ему тыкнуть, что у него их нет через алёрт. а эту штуку убрать
+        name = "Нет результатов"
+        return name, "У Вас нет добавленных достижений!"
 
     #
     # except Exception as e:
