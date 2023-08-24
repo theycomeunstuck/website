@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect, JsonResponse, HttpResponseBadRequest
-import pyrebase
+import pyrebase, os, zipfile, datetime
 from django.core.files.uploadedfile import UploadedFile
 from django.contrib.auth.views import LoginView
 from django.views.generic import ListView, DetailView, CreateView
@@ -153,6 +153,9 @@ def edit_achievement(request, key):
 
 
 def make_report(request):
+    if does_user_auth(request) == "auth":
+        return redirect('auth')
+
     #todo: сделать make_report
     print('make_report views.py')
     data = {'title': 'Формирование отчёта'}
@@ -164,7 +167,25 @@ def make_report(request):
             # функция на todo: заполнять то, что заполнено, если дата кривая/пойти тут через selected (?)
             return render(request, "main/make_report.html", data)
         else:
-            generate_report(request)
+            name, dirname = generate_report(request) #архив с достижениями и название архива
+            print(f"file name: {name}")
+            if name == "Нет результатов":
+                data['warn_message'] = f'По заданным фильтрам не были найдены достижения'
+                return render(request, "main/make_report.html", data)
+
+            elif request.POST.get("downloadScans") != None: #т.е. выбран
+                with open(f'{name}.zip', 'rb') as file:
+                    response = HttpResponse(file.read(), content_type='application/zip')
+                    response['Content-Disposition'] = f'attachment; filename={name}.zip' #todo: название архива make-report instead отчёт ччч-ччч
+                # Удаляем архив после того как он был отправлен пользователю
+                os.remove(f'{name}.zip')
+            else:
+                with open(f'{name}.docx', 'rb') as file:
+                    response = HttpResponse(file.read(), content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+                    response['Content-Disposition'] = f'attachment; filename={name}.docx'
+
+            os.remove(f'{name}.docx')
+            return response
 
 
     return render(request, "main/make_report.html", data)
@@ -178,5 +199,6 @@ def logout(request):
 
 # todo: часть учителя
 # todo: часть админа
-# todo: смотри тг favorite
-# todo: сделать красивый выбор в make_report (smthing like this https://codepen.io/maggiben/pen/BapEGv)
+# todo: /дизайн интерфейса/ сделать красивый выбор в make_report (smthing like this https://codepen.io/maggiben/pen/BapEGv)
+# todo: /интерфейс/ добавить новые workType (виды работ). вот типо олимпиада не точка будущего, а похожее по названию, там же не решение задач, а как-то по другому/бизнес предложение (?)
+# todo: /безопасность/ шифровать куки и каждый раз расшифровывать

@@ -22,24 +22,34 @@
     <form method="POST" id="achievementForm" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-group">
-    <label for="competitionType">Вид конкурса:</label>
-    <select id="competitionType" name="competitionType">
-        <option value="Олимпиада" {% if request.POST.competitionType == 'Олимпиада' %}selected{% endif %}>Олимпиада</option>
-        <option value="Конференция" {% if request.POST.competitionType == 'Конференция' %}selected{% endif %}>Конференция</option>
-        <option value="Фестиваль" {% if request.POST.competitionType == 'Фестиваль' %}selected{% endif %}>Фестиваль</option>
-        <option value="Семинар" {% if request.POST.competitionType == 'Семинар' %}selected{% endif %}>Семинар</option>
-        <option value="Конкурс" {% if request.POST.competitionType == 'Конкурс' %}selected{% endif %}>Конкурс</option>
-        <option value="Курс" {% if request.POST.competitionType == 'Курс' %}selected{% endif %}>Курс</option>
-        <option value="Вебинар" {% if request.POST.competitionType == 'Вебинар' %}selected{% endif %}>Вебинар</option>
-        <option value="Проект" {% if request.POST.competitionType == 'Проект' %}selected{% endif %}>Проект</option>
-        <option value="Стажировка" {% if request.POST.competitionType == 'Стажировка' %}selected{% endif %}>Стажировка</option>
-        <option value="Мастер-класс" {% if request.POST.competitionType == 'Мастер-класс' %}selected{% endif %}>Мастер-класс</option>
-        <option value="Пресс-конференция" {% if request.POST.competitionType == 'Пресс-конференция' %}selected{% endif %}>Пресс-конференция</option>
-    </select>
-</div>
+        <label for="competitionType">Вид конкурса:</label>
+        <select id="competitionType" name="competitionType">
+            <option value="Олимпиада" {% if request.POST.competitionType == 'Олимпиада' %}selected{% endif %}>Олимпиада</option>
+            <option value="Конференция" {% if request.POST.competitionType == 'Конференция' %}selected{% endif %}>Конференция</option>
+            <option value="Фестиваль" {% if request.POST.competitionType == 'Фестиваль' %}selected{% endif %}>Фестиваль</option>
+            <option value="Семинар" {% if request.POST.competitionType == 'Семинар' %}selected{% endif %}>Семинар</option>
+            <option value="Конкурс" {% if request.POST.competitionType == 'Конкурс' %}selected{% endif %}>Конкурс</option>
+            <option value="Курс" {% if request.POST.competitionType == 'Курс' %}selected{% endif %}>Курс</option>
+            <option value="Вебинар" {% if request.POST.competitionType == 'Вебинар' %}selected{% endif %}>Вебинар</option>
+            <option value="Проект" {% if request.POST.competitionType == 'Проект' %}selected{% endif %}>Проект</option>
+            <option value="Стажировка" {% if request.POST.competitionType == 'Стажировка' %}selected{% endif %}>Стажировка</option>
+            <option value="Мастер-класс" {% if request.POST.competitionType == 'Мастер-класс' %}selected{% endif %}>Мастер-класс</option>
+            <option value="Пресс-конференция" {% if request.POST.competitionType == 'Пресс-конференция' %}selected{% endif %}>Пресс-конференция</option>
+        </select>
+        </div>
         <div class="form-group">
             <label for="workName">Название работы:</label>
-            <input type="text" id="workName" name="workName" value="{{ request.POST.workName }}" required></div>
+            <input type="text" id="workName" name="workName" value="{{ request.POST.workName }}" required>
+        </div>
+        <div class="form-group">
+            <label for="workType">Вид работы:</label>
+            <select id="workType" name="workType">
+            <option value="Проект" {% if request.POST.workType == 'Проект' %}selected{% endif %}>Проект</option>
+            <option value="Исследование" {% if request.POST.workType == 'Исследование' %}selected{% endif %}>Исследование</option>
+            <option value="Решение задач" {% if request.POST.workType == 'Решение задач' %}selected{% endif %}>Решение задач</option>
+            <option value="Выступление" {% if request.POST.workType == 'Выступление' %}selected{% endif %}>Выступление</option>
+            </select>
+        </div>
         <div class="form-group">
             <label for="documentType">Вид документа:</label>
             <select id="documentType" name="documentType">

@@ -31,7 +31,17 @@
         </div>
         <div class="form-group">
             <label for="workName">Название работы:</label>
-            <input type="text" id="workName" name="workName" value="{{ achievement.competition_name }}" required></div>
+            <input type="text" id="workName" name="workName" value="{{ achievement.competition_name }}" required>
+        </div>
+        <div class="form-group">
+            <label for="workType">Вид работы:</label>
+            <select id="workType" name="workType">
+            <option value="Проект" {% if request.POST.workType == 'Проект' %}selected{% endif %}>Проект</option>
+            <option value="Исследование" {% if request.POST.workType == 'Исследование' %}selected{% endif %}>Исследование</option>
+            <option value="Решение задач" {% if request.POST.workType == 'Решение задач' %}selected{% endif %}>Решение задач</option>
+            <option value="Выступление" {% if request.POST.workType == 'Выступление' %}selected{% endif %}>Выступление</option>
+            </select>
+        </div>
         <div class="form-group">
             <label for="documentType">Вид документа:</label>
             <select id="documentType" name="documentType">
@@ -44,7 +54,6 @@
             <option value="Статья" {% if achievement.type_document == 'Статья' %}selected{% endif %}>Статья</option>
             <option value="Медаль" {% if achievement.type_document == 'Медаль' %}selected{% endif %}>Медаль</option>
         </select>
-
         </div>
 
         <div class="form-group">
