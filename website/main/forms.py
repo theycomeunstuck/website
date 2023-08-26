@@ -286,16 +286,16 @@ def generate_report(request):
     workType = request.POST.get("workType")
     subject = request.POST.get("subject")
     downloadScans = request.POST.get("downloadScans") #False == None | True = "on"
-    _isEmpty, name, doc, paragraph = True, f'Отчёт {startDate} — {endDate}', "", ""
+    _StartYear, _StartMonth, _StartDay = map(int, startDate.split("."))
+    _EndYear, _EndMonth, _EndDay = map(int, endDate.split("."))
+    _isEmpty, name, _Achievements_count, doc, paragraph = True, f'Отчёт {_StartDay}.{_StartMonth}.{_StartYear} — {_EndDay}.{_EndMonth}.{_EndYear}', 0, "", ""
     achievements = db.child("users").child(localId).child("achievements").get().val()
     startDate = datetime.datetime.strptime(startDate, "%Y.%m.%d").date()
     endDate = datetime.datetime.strptime(endDate, "%Y.%m.%d").date()
 
-
     # print(achievements, "\n\n\n")
     if achievements:
-        for key in achievements: #todo: НАПИСАТЬ ХУЙНЮ КОТОРАЯ ОЧИСТИТ ОТ АЧИВОК С КРИВОЙ ДАТОЙ (YMD) И СЛИШКМО МАЛЕНЬКИМИ/БОЛЬШИМИ НУ ТИПО КАК НЕГРОВ СДЕЛАТЬ
-            print("hi")
+        for key in achievements:
             name_comp = achievements[key]['competition_name'] #Названике работы
             type_comp = achievements[key]['competition_type'] #Вид конкурса
             level_comp = achievements[key]["level_competition"] #Уровень конкурса
@@ -303,10 +303,9 @@ def generate_report(request):
             subject_comp = achievements[key]["subject"] #Предметы
             workType_comp = achievements[key]["work_type"] #Вид работы (Решение задач, выступление)
             docType_comp = achievements[key]["type_document"] #Вид документа
-            print(key, name_comp)
-            compDate = datetime.datetime.strptime(achievements[key]['date'], "%d.%m.%Y").date()
-            print(f'{achievements[key]}\n')
-            if startDate <= compDate <= endDate: #todo: сделать мультивыбор в фильтре, а затем убрать |(     or XXX_comp == XXX)
+            date = achievements[key]['date']
+            # compDate = datetime.datetime.strptime(date, "%d.%m.%Y").date()
+            if startDate <= datetime.datetime.strptime(date, "%d.%m.%Y").date() <= endDate: #todo: сделать мультивыбор в фильтре, а затем убрать |(     or XXX_comp == XXX)
             #     if type_comp in competitionType or "Любые" in competitionType or (type_comp == competitionType):
             #         if workType_comp == workType or "Любые" in workType or (workType_comp == workType):
             #             if docType_comp in documentType or "Любые" in documentType or (docType_comp == documentType):
@@ -318,10 +317,11 @@ def generate_report(request):
                     doc = docx.Document()
                     paragraph = doc.add_paragraph()
                     _isEmpty = False
+                _Achievements_count += 1
 
                 paragraph.add_run(f'Название конкурса: {name_comp}\n')
                 paragraph.add_run(f'Вид конкурса: {type_comp}\n')
-                paragraph.add_run(f'Дата проведения конкурса: {compDate}\n')
+                paragraph.add_run(f'Дата проведения конкурса: {date}\n')
                 paragraph.add_run(f'Занятое место: {position_comp}\n')
                 paragraph.add_run(f'Уровень конкурса: {level_comp}\n')
                 paragraph.add_run(f'Предмет конкурса: {subject_comp}\n')
@@ -352,39 +352,31 @@ def generate_report(request):
             name = "Нет результатов"
             return name, f'По заданным фильтрам не были найдены достижения'
 
-        #todo: запись сколько всего достижений с такими параметрами и какие фильтры были выбраны
-        pretty_compTypes, pretty_docTypes, pretty_posTypes, pretty_lvlTypes, pretty_workTypes, pretty_subjectTypes= '', '','','','',''
-        for type in competitionType:
-            pretty_compTypes = f'{pretty_compTypes}, {type}'
-
         # todo: расскоментировать после того, как сделаешь мультивыбор для всей хуйни
+        pretty_compTypes = ', '.join(competitionType)
+        # pretty_docTypes = ', '.join(documentType)
+        # pretty_posTypes = ', '.join(position)
+        # pretty_lvlTypes = ', '.join(olympiadLevel)
+        # pretty_workTypes = ', '.join(workType)
+        # pretty_subjectTypes = ', '.join(subject)
+
         pretty_docTypes, pretty_posTypes, pretty_lvlTypes, pretty_workTypes, pretty_subjectTypes = documentType, position, olympiadLevel, workType, subject
-        # for type in documentType:
-        #     pretty_docTypes = f'{pretty_docTypes}, {type}'
-        # for type in position:
-        #     pretty_posTypes = f'{pretty_posTypes}, {type}'
-        # for type in olympiadLevel:
-        #     pretty_lvlTypes = f'{pretty_lvlTypes}, {type}'
-        # for type in workType:
-        #     pretty_workTypes = f'{pretty_workTypes}, {type}'
-        # for type in subject:
-        #     pretty_subjectTypes = f'{pretty_subjectTypes}, {type}'
-        _wordForm, _foundForm = '', ''
-        word_forms_count = ['найден', 'найдено', 'найдено']        if _Achievements_count % 10 == 1 and _Achievements_count % 100 != 11:
-            _wordForm = 'конкурс'
+        _wordForm, _foundForm = '', 'найдено'
+        if _Achievements_count % 10 == 1 and _Achievements_count % 100 != 11:
+            _wordForm, _foundForm = 'конкурс', 'найден'
         elif 2 <= _Achievements_count % 10 <= 4 and (_Achievements_count % 100 < 10 or _Achievements_count % 100 >= 20):
             _wordForm = 'конкурса'
         else:
             _wordForm = 'конкурсов'
         paragraph.add_run(f'Всего {_foundForm} {_Achievements_count} {_wordForm} по заданным параметрам:\n')
         paragraph.add_run(f'   Виды конкурсов: {pretty_compTypes}\n')
-        paragraph.add_run(f'   Даты проведения конкурсов: {startDate} — {endDate}\n')
+        paragraph.add_run(f'   Даты проведения конкурсов: {_StartDay}.{_StartMonth}.{_StartYear} — {_EndDay}.{_EndMonth}.{_EndYear}\n') #todo: fix вывод такой даты 1.1.1200 — 1.1.2050. почему нет 0 перед д.м -- хз, но это с StartDate связано
         paragraph.add_run(f'   Занятые места: {pretty_posTypes}\n')
         paragraph.add_run(f'   Уровени конкурсов: {pretty_lvlTypes}\n')
         paragraph.add_run(f'   Предметы конкурсов: {pretty_subjectTypes}\n')
         paragraph.add_run(f'   Тип работ: {pretty_workTypes}\n')
         paragraph.add_run(f'   Тип документов: {pretty_docTypes}\n')
-        doc.save(f'  \n')
+
         doc.save(f'{name}.docx')
         if downloadScans != None:
             with zipfile.ZipFile(f'{name}.zip', 'a', zipfile.ZIP_DEFLATED) as zipf:

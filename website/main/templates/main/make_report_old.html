@@ -2,12 +2,9 @@
 <html>
 <head>
     {% load static %}
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
     <link rel="icon" href="{% static 'website/img/favicon.ico' %}">
     <link rel="stylesheet" href="{% static 'website/css/style_make_report.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <!--    <link rel="stylesheet" href="{% static 'website/css/public/style_notification.css' %}">-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
@@ -25,6 +22,7 @@
 <!--    todo: rename post ID-->
     <form method="POST" id="reportForm" enctype="multipart/form-data">
         {% csrf_token %}
+
 
 
 

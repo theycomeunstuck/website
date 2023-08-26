@@ -1,0 +1,84 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column; /* mb trash*/
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.content {
+    width: 50%;
+    position: relative;
+    /*margin-top: 5%;*/
+    /*margin: 35% auto; !* Добавлено значение "auto" для центрирования по горизонтали *!*/
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 30px;
+}
+
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+input[type="text"],
+select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+
+button {
+    /*padding: 10px 20px;*/
+    background-color: #4CAF50;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 12px 24px;
+    font-size: 18px;
+}
+
+.datepicker {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.selected-values { /* todo: не адаптивная залупа */
+    margin-bottom: 24px;
+    color: #888;
+    font-size: 14px;
+}
+
+
+.chosen-container-multi .chosen-choices .search-choice {
+    background-color: #f0f0f0; /* Цвет выбранных опций */
+    color: #333; /* Цвет текста для выбранных опций */
+    margin-top: 6px;
+    margin-right: 6px;
+}
+
+.chosen-container-multi .chosen-choices .search-choice-focus {
+    background-color: #e0e0e0; /* Цвет фона для подсвеченной выбранной опции */
+    background-color: indianred; /* Цвет фона для подсвеченной выбранной опции */
+
+}
+.chosen-container-multi .chosen-results li.highlighted {
+    background-color: #e0e0e0; /* Цвет фона для подсвеченной не выбранной опции */
+}

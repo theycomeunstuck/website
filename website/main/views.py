@@ -166,7 +166,6 @@ def make_report(request):
             return render(request, "main/make_report.html", data)
         else:
             name, dirname = generate_report(request) #название архива и путь до него / нет результата и варн мессаге
-            print(f"file name: {name}")
             if name == "Нет результатов":
                 data['warn_message'] = f'{dirname}'
                 return render(request, "main/make_report.html", data)
