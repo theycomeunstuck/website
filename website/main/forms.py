@@ -1,5 +1,5 @@
 from django import forms
-import pyrebase, firebase_admin, urllib3, json, datetime, requests, docx, zipfile, os
+import pyrebase, urllib3, json, datetime, requests, docx, zipfile, os
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
@@ -303,6 +303,7 @@ def generate_report(request):
             subject_comp = achievements[key]["subject"] #Предметы
             workType_comp = achievements[key]["work_type"] #Вид работы (Решение задач, выступление)
             docType_comp = achievements[key]["type_document"] #Вид документа
+            print(key, name_comp)
             compDate = datetime.datetime.strptime(achievements[key]['date'], "%d.%m.%Y").date()
             print(f'{achievements[key]}\n')
             if startDate <= compDate <= endDate: #todo: сделать мультивыбор в фильтре, а затем убрать |(     or XXX_comp == XXX)
@@ -352,6 +353,38 @@ def generate_report(request):
             return name, f'По заданным фильтрам не были найдены достижения'
 
         #todo: запись сколько всего достижений с такими параметрами и какие фильтры были выбраны
+        pretty_compTypes, pretty_docTypes, pretty_posTypes, pretty_lvlTypes, pretty_workTypes, pretty_subjectTypes= '', '','','','',''
+        for type in competitionType:
+            pretty_compTypes = f'{pretty_compTypes}, {type}'
+
+        # todo: расскоментировать после того, как сделаешь мультивыбор для всей хуйни
+        pretty_docTypes, pretty_posTypes, pretty_lvlTypes, pretty_workTypes, pretty_subjectTypes = documentType, position, olympiadLevel, workType, subject
+        # for type in documentType:
+        #     pretty_docTypes = f'{pretty_docTypes}, {type}'
+        # for type in position:
+        #     pretty_posTypes = f'{pretty_posTypes}, {type}'
+        # for type in olympiadLevel:
+        #     pretty_lvlTypes = f'{pretty_lvlTypes}, {type}'
+        # for type in workType:
+        #     pretty_workTypes = f'{pretty_workTypes}, {type}'
+        # for type in subject:
+        #     pretty_subjectTypes = f'{pretty_subjectTypes}, {type}'
+        _wordForm, _foundForm = '', ''
+        word_forms_count = ['найден', 'найдено', 'найдено']        if _Achievements_count % 10 == 1 and _Achievements_count % 100 != 11:
+            _wordForm = 'конкурс'
+        elif 2 <= _Achievements_count % 10 <= 4 and (_Achievements_count % 100 < 10 or _Achievements_count % 100 >= 20):
+            _wordForm = 'конкурса'
+        else:
+            _wordForm = 'конкурсов'
+        paragraph.add_run(f'Всего {_foundForm} {_Achievements_count} {_wordForm} по заданным параметрам:\n')
+        paragraph.add_run(f'   Виды конкурсов: {pretty_compTypes}\n')
+        paragraph.add_run(f'   Даты проведения конкурсов: {startDate} — {endDate}\n')
+        paragraph.add_run(f'   Занятые места: {pretty_posTypes}\n')
+        paragraph.add_run(f'   Уровени конкурсов: {pretty_lvlTypes}\n')
+        paragraph.add_run(f'   Предметы конкурсов: {pretty_subjectTypes}\n')
+        paragraph.add_run(f'   Тип работ: {pretty_workTypes}\n')
+        paragraph.add_run(f'   Тип документов: {pretty_docTypes}\n')
+        doc.save(f'  \n')
         doc.save(f'{name}.docx')
         if downloadScans != None:
             with zipfile.ZipFile(f'{name}.zip', 'a', zipfile.ZIP_DEFLATED) as zipf:
@@ -367,6 +400,5 @@ def generate_report(request):
     # except Exception as e:
     #     print(f'forms.py| def generate_report | line 312|  !!!отчёт не сформирован\n{e}')
     #     return f'Отчёт не сформирован.\n{e}'
-
 
 
