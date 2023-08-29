@@ -1,21 +1,30 @@
-const selectBtn = document.querySelector(".select-btn"),
-      items = document.querySelectorAll(".item");
+$(document).ready(function () {
+    $(".chosen-select").chosen({
+        placeholder_text_multiple: "Выберите опции",
+        no_results_text: "Ничего не найдено"
+    });
 
-selectBtn.addEventListener("click", () => {
-    selectBtn.classList.toggle("open");
+    $(".chosen-select").on("change", function () {
+        var selectedOptions = $(this).val();
+        var selectedValuesDiv = $(".selected-values");
+        selectedValuesDiv.empty();
+
+    });
+
+    $(".chosen-container-multi .chosen-choices").on("click", function (e) {
+        if ($(e.target).hasClass("search-choice-close")) {
+            var unselectedOption = $(e.target).closest(".search-choice");
+            var optionValue = unselectedOption.data("option-array-index");
+            $(".chosen-select").find('option[value="' + optionValue + '"]').removeAttr("selected");
+            $(".chosen-select").trigger("chosen:updated");
+        }
+    });
 });
 
-items.forEach(item => {
-    item.addEventListener("click", () => {
-        item.classList.toggle("checked");
-
-        let checked = document.querySelectorAll(".checked"),
-            btnText = document.querySelector(".btn-text");
-
-            if(checked && checked.length > 0){
-                btnText.innerText = `${checked.length} Selected`;
-            }else{
-                btnText.innerText = "Select Language";
-            }
-    });
-})
+$(document).ready(function () {
+            // $('#workType').multiselect();
+            $('#workType').on('click', function() {
+                $('#workType').multiselect('toggle');
+                console.log("here is reaction. some button pressed!")
+            });
+        });
