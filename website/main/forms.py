@@ -273,124 +273,123 @@ def validate_date(startDate, endDate):
 # startDate, endDate = f'{_StartDay}.{_StartMonth}.{_StartYear}', f'{_EndDay}.{_EndMonth}.{_EndYear}'
 
 def generate_report(request):
-    # try:
-    localId = request.COOKIES['user_localId']
-    idToken = request.COOKIES['user_idToken']
+    try:
+        localId = request.COOKIES['user_localId']
+        idToken = request.COOKIES['user_idToken']
 
-    competitionType = request.POST.getlist("competitionType") # ['Любые', 'Олимпиада'] (как массив)
-    documentType = request.POST.get("documentType") #сертификат грамота диплом благодарность
-    startDate = str(request.POST.get("startDate")).replace("-", ".")
-    endDate = str(request.POST.get("endDate")).replace("-", ".")
-    position = request.POST.get("position")
-    olympiadLevel = request.POST.get("olympiadLevel")
-    workType = request.POST.get("workType")
-    subject = request.POST.get("subject")
-    downloadScans = request.POST.get("downloadScans") #False == None | True = "on"
-    _StartYear, _StartMonth, _StartDay = map(int, startDate.split("."))
-    _EndYear, _EndMonth, _EndDay = map(int, endDate.split("."))
-    _isEmpty, name, _Achievements_count, doc, paragraph = True, f'Отчёт {_StartDay}.{_StartMonth}.{_StartYear} — {_EndDay}.{_EndMonth}.{_EndYear}', 0, "", ""
-    achievements = db.child("users").child(localId).child("achievements").get().val()
-    startDate = datetime.datetime.strptime(startDate, "%Y.%m.%d").date()
-    endDate = datetime.datetime.strptime(endDate, "%Y.%m.%d").date()
+        competitionType = request.POST.getlist("competitionType") # ['Любые', 'Олимпиада'] (как массив)
+        documentType = request.POST.getlist("documentType") #сертификат грамота диплом благодарность
+        startDate = str(request.POST.get("startDate")).replace("-", ".")
+        endDate = str(request.POST.get("endDate")).replace("-", ".")
+        position = request.POST.getlist("position")
+        olympiadLevel = request.POST.getlist("olympiadLevel")
+        workType = request.POST.getlist("workType")
+        subject = request.POST.getlist("subject")
+        downloadScans = request.POST.get("downloadScans") #False == None | True = "on"
+        _StartYear, _StartMonth, _StartDay = map(int, startDate.split("."))
+        _EndYear, _EndMonth, _EndDay = map(int, endDate.split("."))
+        _isEmpty, name, _Achievements_count, doc, paragraph = True, f'Отчёт {_StartDay}.{_StartMonth}.{_StartYear} — {_EndDay}.{_EndMonth}.{_EndYear}', 0, "", ""
+        achievements = db.child("users").child(localId).child("achievements").get().val()
+        startDate = datetime.datetime.strptime(startDate, "%Y.%m.%d").date()
+        endDate = datetime.datetime.strptime(endDate, "%Y.%m.%d").date()
 
-    # print(achievements, "\n\n\n")
-    if achievements:
-        for key in achievements:
-            name_comp = achievements[key]['competition_name'] #Названике работы
-            type_comp = achievements[key]['competition_type'] #Вид конкурса
-            level_comp = achievements[key]["level_competition"] #Уровень конкурса
-            position_comp = achievements[key]["place"] #Занятое место
-            subject_comp = achievements[key]["subject"] #Предметы
-            workType_comp = achievements[key]["work_type"] #Вид работы (Решение задач, выступление)
-            docType_comp = achievements[key]["type_document"] #Вид документа
-            date = achievements[key]['date']
-            # compDate = datetime.datetime.strptime(date, "%d.%m.%Y").date()
-            if startDate <= datetime.datetime.strptime(date, "%d.%m.%Y").date() <= endDate: #todo: сделать мультивыбор в фильтре, а затем убрать |(     or XXX_comp == XXX)
-            #     if type_comp in competitionType or "Любые" in competitionType or (type_comp == competitionType):
-            #         if workType_comp == workType or "Любые" in workType or (workType_comp == workType):
-            #             if docType_comp in documentType or "Любые" in documentType or (docType_comp == documentType):
-            #                 if level_comp in olympiadLevel or "Любые" in olympiadLevel or (level_comp == olympiadLevel):
-            #                     if position_comp in position or "Любые" in position or (position_comp == position):
-            #                         if subject_comp == subject or "Любые" in subject or (subject_comp == subject) or (subject_comp == "Другое" and subject == "Другой"): #todo: костыльебауный
+        if achievements:
+            for key in achievements:
+                name_comp = achievements[key]['competition_name'] #Названике работы
+                type_comp = achievements[key]['competition_type'] #Вид конкурса
+                level_comp = achievements[key]["level_competition"] #Уровень конкурса
+                position_comp = achievements[key]["place"] #Занятое место
+                subject_comp = achievements[key]["subject"] #Предметы
+                workType_comp = achievements[key]["work_type"] #Вид работы (Решение задач, выступление)
+                docType_comp = achievements[key]["type_document"] #Вид документа
+                date = achievements[key]['date']
+                if startDate <= datetime.datetime.strptime(date, "%d.%m.%Y").date() <= endDate:
+                    if type_comp in competitionType or "Любые" in competitionType:
+                        if workType_comp == workType or "Любые" in workType:
+                            if docType_comp in documentType or "Любые" in documentType:
+                                if level_comp in olympiadLevel or "Любые" in olympiadLevel:
+                                    if position_comp in position or "Любые" in position:
+                                        if subject_comp == subject or "Любые" in subject or (subject_comp == "Другое" and subject == "Другой"):
 
-                if _isEmpty:
-                    doc = docx.Document()
-                    paragraph = doc.add_paragraph()
-                    _isEmpty = False
-                _Achievements_count += 1
+                                            if _isEmpty:
+                                                doc = docx.Document()
+                                                paragraph = doc.add_paragraph()
+                                                _isEmpty = False
+                                            _Achievements_count += 1
 
-                paragraph.add_run(f'Название конкурса: {name_comp}\n')
-                paragraph.add_run(f'Вид конкурса: {type_comp}\n')
-                paragraph.add_run(f'Дата проведения конкурса: {date}\n')
-                paragraph.add_run(f'Занятое место: {position_comp}\n')
-                paragraph.add_run(f'Уровень конкурса: {level_comp}\n')
-                paragraph.add_run(f'Предмет конкурса: {subject_comp}\n')
-                paragraph.add_run(f'Тип работы: {workType_comp}\n')
-                paragraph.add_run(f'Тип документа: {docType_comp}\n')
-                paragraph.add_run('\n')
-                paragraph.add_run('\n')
-                if downloadScans != None:
-                    file_format = achievements[key]["file_format"]
-                    encoded_file_path = f'{localId}/{key}.{file_format}'.replace('/', '%2F')
-                    url = f'https://firebasestorage.googleapis.com/v0/b/{firebaseConfig["storageBucket"]}/o/{encoded_file_path}?alt=media'
-                    response = requests.get(url)
-                    if response.status_code == 200:
-                        file_path = os.path.join(f'{key}.{file_format}')
-                        with open(file_path, 'wb') as file:
-                            file.write(response.content)
-                        with zipfile.ZipFile(f'{name}.zip', 'a', zipfile.ZIP_DEFLATED) as zipf:
-                            zipf.write(file_path, arcname=f'{name_comp}/{name_comp}.{file_format}')
+                                            paragraph.add_run(f'Название конкурса: {name_comp}\n')
+                                            paragraph.add_run(f'Вид конкурса: {type_comp}\n')
+                                            paragraph.add_run(f'Дата проведения конкурса: {date}\n')
+                                            paragraph.add_run(f'Занятое место: {position_comp}\n')
+                                            paragraph.add_run(f'Уровень конкурса: {level_comp}\n')
+                                            paragraph.add_run(f'Предмет конкурса: {subject_comp}\n')
+                                            paragraph.add_run(f'Тип работы: {workType_comp}\n')
+                                            paragraph.add_run(f'Тип документа: {docType_comp}\n')
+                                            paragraph.add_run('\n')
+                                            paragraph.add_run('\n')
+                                            if downloadScans != None:
+                                                file_format = achievements[key]["file_format"]
+                                                encoded_file_path = f'{localId}/{key}.{file_format}'.replace('/', '%2F')
+                                                url = f'https://firebasestorage.googleapis.com/v0/b/{firebaseConfig["storageBucket"]}/o/{encoded_file_path}?alt=media'
+                                                response = requests.get(url)
+                                                if response.status_code == 200:
+                                                    file_path = os.path.join(f'{key}.{file_format}')
+                                                    with open(file_path, 'wb') as file:
+                                                        file.write(response.content)
+                                                    with zipfile.ZipFile(f'{name}.zip', 'a', zipfile.ZIP_DEFLATED) as zipf:
+                                                        zipf.write(file_path, arcname=f'{name_comp}/{name_comp}.{file_format}')
 
-                        os.remove(file_path)
+                                                    os.remove(file_path)
 
-                    else:
-                            pass #todo: break point. warn message, о косяке/попробовать пропустить хуйню эту
+                                                else:
+                                                        pass #todo: break point. warn message, о косяке/попробовать пропустить хуйню эту
 
 
-        if _isEmpty:
-            #todo: (сделано?) не сохранять пользователю, а прямо на сайте сказать, что по заданным параметрам нет достижений.
-            name = "Нет результатов"
-            return name, f'По заданным фильтрам не были найдены достижения'
+            if _isEmpty:
+                #todo: (сделано?) не сохранять пользователю, а прямо на сайте сказать, что по заданным параметрам нет достижений. не нравится внешний вид. на телефонах надо по центру экрана ебашить соо
 
-        # todo: расскоментировать после того, как сделаешь мультивыбор для всей хуйни
-        pretty_compTypes = ', '.join(competitionType)
-        # pretty_docTypes = ', '.join(documentType)
-        # pretty_posTypes = ', '.join(position)
-        # pretty_lvlTypes = ', '.join(olympiadLevel)
-        # pretty_workTypes = ', '.join(workType)
-        # pretty_subjectTypes = ', '.join(subject)
+                name = "Нет результатов"
+                return name, f'По заданным фильтрам не были найдены достижения'
 
-        pretty_docTypes, pretty_posTypes, pretty_lvlTypes, pretty_workTypes, pretty_subjectTypes = documentType, position, olympiadLevel, workType, subject
-        _wordForm, _foundForm = '', 'найдено'
-        if _Achievements_count % 10 == 1 and _Achievements_count % 100 != 11:
-            _wordForm, _foundForm = 'конкурс', 'найден'
-        elif 2 <= _Achievements_count % 10 <= 4 and (_Achievements_count % 100 < 10 or _Achievements_count % 100 >= 20):
-            _wordForm = 'конкурса'
+            # todo: расскоментировать после того, как сделаешь мультивыбор для всей хуйни
+            pretty_compTypes = ', '.join(competitionType)
+            pretty_docTypes = ', '.join(documentType)
+            pretty_posTypes = ', '.join(position)
+            pretty_lvlTypes = ', '.join(olympiadLevel)
+            pretty_workTypes = ', '.join(workType)
+            pretty_subjectTypes = ', '.join(subject)
+
+            # pretty_docTypes, pretty_posTypes, pretty_lvlTypes, pretty_workTypes, pretty_subjectTypes = documentType, position, olympiadLevel, workType, subject
+            _wordForm, _foundForm = '', 'найдено'
+            if _Achievements_count % 10 == 1 and _Achievements_count % 100 != 11:
+                _wordForm, _foundForm = 'конкурс', 'найден'
+            elif 2 <= _Achievements_count % 10 <= 4 and (_Achievements_count % 100 < 10 or _Achievements_count % 100 >= 20):
+                _wordForm = 'конкурса'
+            else:
+                _wordForm = 'конкурсов'
+            paragraph.add_run(f'Всего {_foundForm} {_Achievements_count} {_wordForm} по заданным параметрам:\n')
+            paragraph.add_run(f'   Виды конкурсов: {pretty_compTypes}\n')
+            paragraph.add_run(f'   Даты проведения конкурсов: {_StartDay}.{_StartMonth}.{_StartYear} — {_EndDay}.{_EndMonth}.{_EndYear}\n') #todo: fix вывод такой даты 1.1.1200 — 1.1.2050. почему нет 0 перед д.м -- хз, но это с StartDate связано
+            paragraph.add_run(f'   Занятые места: {pretty_posTypes}\n')
+            paragraph.add_run(f'   Уровени конкурсов: {pretty_lvlTypes}\n')
+            paragraph.add_run(f'   Предметы конкурсов: {pretty_subjectTypes}\n')
+            paragraph.add_run(f'   Тип работ: {pretty_workTypes}\n')
+            paragraph.add_run(f'   Тип документов: {pretty_docTypes}\n')
+
+            doc.save(f'{name}.docx')
+            if downloadScans != None:
+                with zipfile.ZipFile(f'{name}.zip', 'a', zipfile.ZIP_DEFLATED) as zipf:
+                    zipf.write(f'{name}.docx', f'{name}.docx')
+
+            return name, f'{key}'
         else:
-            _wordForm = 'конкурсов'
-        paragraph.add_run(f'Всего {_foundForm} {_Achievements_count} {_wordForm} по заданным параметрам:\n')
-        paragraph.add_run(f'   Виды конкурсов: {pretty_compTypes}\n')
-        paragraph.add_run(f'   Даты проведения конкурсов: {_StartDay}.{_StartMonth}.{_StartYear} — {_EndDay}.{_EndMonth}.{_EndYear}\n') #todo: fix вывод такой даты 1.1.1200 — 1.1.2050. почему нет 0 перед д.м -- хз, но это с StartDate связано
-        paragraph.add_run(f'   Занятые места: {pretty_posTypes}\n')
-        paragraph.add_run(f'   Уровени конкурсов: {pretty_lvlTypes}\n')
-        paragraph.add_run(f'   Предметы конкурсов: {pretty_subjectTypes}\n')
-        paragraph.add_run(f'   Тип работ: {pretty_workTypes}\n')
-        paragraph.add_run(f'   Тип документов: {pretty_docTypes}\n')
+            # todo: (в процессе) также, если у пользователя нет достижений, то в лоб ему тыкнуть, что у него их нет через алёрт. а эту штуку убрать
+            name = "Нет результатов"
+            return name, "У Вас нет добавленных достижений!"
 
-        doc.save(f'{name}.docx')
-        if downloadScans != None:
-            with zipfile.ZipFile(f'{name}.zip', 'a', zipfile.ZIP_DEFLATED) as zipf:
-                zipf.write(f'{name}.docx', f'{name}.docx')
 
-        return name, f'{key}'
-    else:
-        # todo: (в процессе) также, если у пользователя нет достижений, то в лоб ему тыкнуть, что у него их нет через алёрт. а эту штуку убрать
-        name = "Нет результатов"
-        return name, "У Вас нет добавленных достижений!"
-
-    #
-    # except Exception as e:
-    #     print(f'forms.py| def generate_report | line 312|  !!!отчёт не сформирован\n{e}')
-    #     return f'Отчёт не сформирован.\n{e}'
+    except Exception as e:
+        print(f'forms.py| def generate_report | line 312|  !!!отчёт не сформирован\n{e}')
+        return f'Отчёт не сформирован.\n{e}'
 
 

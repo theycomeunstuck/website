@@ -21,10 +21,3 @@ $(document).ready(function () {
     });
 });
 
-$(document).ready(function () {
-            // $('#workType').multiselect();
-            $('#workType').on('click', function() {
-                $('#workType').multiselect('toggle');
-                console.log("here is reaction. some button pressed!")
-            });
-        });

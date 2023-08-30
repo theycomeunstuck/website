@@ -50,19 +50,20 @@
 
         <div class="form-group">
             <label for="workType">Виды работ:</label>
-            <select id="workType" name="workType"  multiple="multiple">
-            <option value="Любые">Любые</option>
+            <select id="workType" name="workType"  multiple required class="chosen-select">
+            <option value="Любые" selected>Любые</option>
             <option value="Проект">Проект</option>
             <option value="Исследование">Исследование</option>
             <option value="Решение задач">Решение задач</option>
             <option value="Выступление">Выступление</option>
         </select>
-
+            <div class="selected-values"></div>
         </div>
 
         <div class="form-group">
             <label for="documentType">Виды документов:</label>
-            <select id="documentType" name="documentType">
+            <select id="documentType" name="documentType" multiple required class="chosen-select">
+            <option value="Любые" selected>Любые</option>
             <option value="Сертификат">Сертификат</option>
             <option value="Грамота">Грамота</option>
             <option value="Диплом">Диплом</option>
@@ -72,6 +73,7 @@
             <option value="Статья">Статья</option>
             <option value="Медаль">Медаль</option>
             </select>
+            <div class="selected-values"></div>
         </div>
 <!--        todo: валидация на клиенте через js, что старт и енд в разумных значениях  -->
         <div class="form-group">
@@ -88,25 +90,30 @@
 <!--        -->
         <div class="form-group">
             <label for="position">Занятые места:</label>
-            <select id="position" name="position">
+            <select id="position" name="position" multiple required class="chosen-select">
+            <option value="Любые" selected>Любые</option>
             <option value="Участник">Участник</option>
             <option value="Призёр">Призёр</option>
             <option value="Победитель">Победитель</option>
             </select>
+            <div class="selected-values"></div>
         </div>
         <div class="form-group">
             <label for="olympiadLevel">Уровни конкурсов:</label>
-            <select id="olympiadLevel" name="olympiadLevel">
+            <select id="olympiadLevel" name="olympiadLevel" multiple required class="chosen-select">
+            <option value="Любые" selected>Любые</option>
             <option value="Школьный">Школьный</option>
             <option value="Региональный">Региональный</option>
             <option value="Муниципальный">Муниципальный</option>
             <option value="Федеральный">Федеральный</option>
             <option value="Международный">Международный</option>
             </select>
+            <div class="selected-values"></div>
         </div>
         <div class="form-group">
         <label for="subject">Предметы:</label>
-        <select id="subject" name="subject">
+        <select id="subject" name="subject" multiple required class="chosen-select">
+            <option value="Любые" selected>Любые</option>
             <option value="Математика">Математика</option>
             <option value="Русский язык">Русский язык</option>
             <option value="Английский язык">Английский язык</option>
@@ -121,6 +128,7 @@
             <option value="История">История</option>
             <option value="Другой">Другой</option>
             <select/>
+            <div class="selected-values"></div>
         </div>
 
         <div class="form-group">

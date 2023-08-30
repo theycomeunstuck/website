@@ -68,6 +68,9 @@ def profile(request):
         if "button" in line:
             button_pressed = True
             name_button = line
+    #todo: что такое button pressed?
+    #todo: прооверка на учителя. если учитель, то ему другую страницу рендерить.
+    #todo: переименовать profile.html в user_profile.html | потом сделать типо teacher_user_profile, но назвать получше
 
     if not button_pressed:
         localId = request.COOKIES['user_localId']
