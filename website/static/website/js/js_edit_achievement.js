@@ -1,36 +1,11 @@
-// document.addEventListener("DOMContentLoaded", function() {
-//     var showScanLink = document.getElementById("show_scan");
-//     if (showScanLink) {
-//         showScanLink.addEventListener("click", function(event) {
-//             event.preventDefault();
-//
-//             // Выполнение запроса AJAX для загрузки файла на сервер
-//             var xhr = new XMLHttpRequest();
-//             xhr.open("POST", "URL_загрузки_файла", true);
-//             xhr.onreadystatechange = function() {
-//                 if (xhr.readyState === 4) {
-//                     if (xhr.status === 200) {
-//                         // Успешная загрузка файла
-//
-//                         // Отправка файла пользователю
-//                         var downloadUrl = "URL_скачивания_файла";
-//                         var downloadLink = document.createElement("a");
-//                         downloadLink.href = downloadUrl;
-//                         downloadLink.download = "{{ achievement.competition_name|slugify }}.{{ achievement.file_format }}";
-//                         downloadLink.click();
-//
-//                         // Удаление файла с сервера
-//                         var deleteUrl = "URL_удаления_файла";
-//                         var deleteRequest = new XMLHttpRequest();
-//                         deleteRequest.open("DELETE", deleteUrl, true);
-//                         deleteRequest.send();
-//                     } else {
-//                         // Ошибка загрузки файла
-//                         console.error("Ошибка загрузки файла");
-//                     }
-//                 }
-//             };
-//             xhr.send(форма_загрузки_файла);
-//         });
-//     }
-// });
+function checkFileSize(input) {
+    if (input.files && input.files[0]) {
+        var fileSize = input.files[0].size; // Размер файла в байтах
+        var maxSize = 2 * 1024 * 1024; // 2 МБ в байтах
+
+        if (fileSize > maxSize) {
+            alert('Размер файла слишком большой! Максимальный размер файла - 2 МБ.');
+            input.value = '';
+        }
+    }
+}

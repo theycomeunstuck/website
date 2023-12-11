@@ -102,11 +102,14 @@
         <div class="form-group" id="scanarea">
             <label for="scan">Изменить скан:</label>
             <input type="file" id="scan" name="scan"
-                   accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.gif,.zip,.rar,.7z,.bmp,.ppt,.pptx" >
+                   onchange="checkFileSize(this)"
+                   accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.gif,.zip,.rar,.7z,.bmp,.ppt,.pptx">
+            <small style="color: grey;">Максимальный размер файла - 2MB</small>
         </div>
 
 
         <button type="submit" id="submit_button">Изменить достижение</button>
+
     </form>
     {% if achievement.file_format in "'.png', '.jpg', '.jpeg', '.gif'" %}
        <a href="{{ scan_url }}" id="show_scan" target="_blank" class="button-link">Посмотреть выбранный скан</a>

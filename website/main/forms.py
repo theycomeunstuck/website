@@ -1,10 +1,11 @@
-from django import forms
 import pyrebase, urllib3, json, datetime, requests, docx, zipfile, os
+from PIL import Image
+from io import BytesIO
+from django import forms
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-
 
 
 firebaseConfig = {
@@ -53,44 +54,21 @@ class LoginUserForm():
         except Exception as e:
             print(e)
 
-    def fill_fields(self, localId):
-        student = db.child('users').child(localId).child('profile').get()
-        data = student.val()
-
+    def user_fill_fields(self, localId):
+        data = db.child('users').child(localId).child('profile').get().val()
         _Data = db.child('users').child(localId).child('achievements').get().val()
-        i = 0
+        return data['name'], data['surname'], data['letter'], data['class'], len(_Data)
 
-        for _key in _Data:
-            i += 1
 
-        data['countAchievements'] = i
-        return data['name'], data['surname'], data['letter'], data['class'], data['countAchievements']
+
 
 
 def does_user_auth(request):  # request.COOKIES
     if len(request.COOKIES) != 3 or len(request.COOKIES) < 3 or request.COOKIES == '{}':
-        print(f'forms.py | 67 | redirect to auth')
-        #todo: проверка на то, что есть нужные куки. нет нужных куки - пока
-        #todo: выход со всех других сессий, если замена пароля
+        #todo: проверка на то, что есть нужные куки. нет нужных куки - пока. | не имеет значения когда, очень простое
+        #todo: выход со всех других сессий, если замена пароля | musthave, но реализуемо лишь после создания страницы с заменой пароля, простое
         return 'auth'
-    # try:
-    #     if not(request.COOKIES['user_localId'] in request.COOKIES) and not(request.COOKIES['user_idToken'] in request.COOKIES):
-    #         print(f'forms.py | 71 | redirect to auth')
-    #         return 'auth'
-    #
-    # except Exception as e:
-    #     print(f"forms.py | 74| {e}")
-        # idToken = request.COOKIES['user_idToken']
-        # try:
-        #     if request.COOKIES["csrftoken"] != "" and request.COOKIES["csrftoken"] != "" and request.COOKIES["csrftoken"] != "":
-        #         continue
-        #     else:
-        #         redirect("auth")
-        # except Exception as e:
-        #     print(f"error when check cookie| {e} \nviews.py (81)")
-        #     return redirect("auth")
-        # TODO | если пользователь не авторизован, то надо и даже не пытаться выводить ему имя и фамку, но постоянно
-        # проверять пользователя -- тоже гемор и долго (наверное). но пока что изложеннное выше решение
+
 
 
 def add_user_achievement(request):
@@ -115,6 +93,9 @@ def add_user_achievement(request):
 
         db.child('users').child(localId).child('achievements').push(achievement)
 
+        if _File.content_type.startswith('image'):  # Проверяем, является ли файл изображением
+            _File = compress_image(_File, _File_format)
+
         #добавление скана в бд (storage)
         achievements = db.child('users').child(localId).child('achievements').get()
         data3 = achievements.val()
@@ -131,6 +112,14 @@ def add_user_achievement(request):
 
     # storage.child("/" + localId + "/" + key_achievement + "." + _File_format).put(_File, idToken)
 
+def compress_image(image, file_format):
+    print(str(image))
+    img = Image.open(image)
+    output = BytesIO()
+    if file_format == 'jpg': file_format = 'JPEG'
+    img.save(output, format=file_format, quality=70)
+    output.seek(0)
+    return output
 
 
 def get_list_achievements(request):
@@ -215,6 +204,9 @@ def edit_user_achievement(request, key):
                 pass
             else:
                 response.raise_for_status()
+
+            if _File.content_type.startswith('image'):  # Проверяем, является ли файл изображением
+                _File = compress_image(_File, _File_format)
             storage.child(f'/{localId}/{key}.{_File_format}').put(_File, idToken)
         db.child('users').child(localId).child('achievements').child(key).update(achievement)
         return 'Достижение успешно изменено!'
@@ -342,16 +334,16 @@ def generate_report(request):
                                                     os.remove(file_path)
 
                                                 else:
-                                                        pass #todo: break point. warn message, о косяке/попробовать пропустить хуйню эту
+                                                        pass #todo: break point. warn message, о косяке/попробовать пропустить эту
 
 
             if _isEmpty:
-                #todo: (сделано?) не сохранять пользователю, а прямо на сайте сказать, что по заданным параметрам нет достижений. не нравится внешний вид. на телефонах надо по центру экрана ебашить соо
+                #todo: (сделано?) не сохранять пользователю, а прямо на сайте сказать, что по заданным параметрам нет достижений. !не нравится внешний вид. на телефонах надо по центру экрана делать соо
 
                 name = "Нет результатов"
                 return name, f'По заданным фильтрам не были найдены достижения'
 
-            # todo: расскоментировать после того, как сделаешь мультивыбор для всей хуйни
+            # todo: расскоментировать после того, как сделаешь мультивыбор для всего
             pretty_compTypes = ', '.join(competitionType)
             pretty_docTypes = ', '.join(documentType)
             pretty_posTypes = ', '.join(position)
@@ -383,7 +375,7 @@ def generate_report(request):
 
             return name, f'{key}'
         else:
-            # todo: (в процессе) также, если у пользователя нет достижений, то в лоб ему тыкнуть, что у него их нет через алёрт. а эту штуку убрать
+            # todo: (в процессе) также, если у пользователя нет достижений, то в лоб ему тыкнуть, что у него их нет через алёрт, а эту штуку убрать
             name = "Нет результатов"
             return name, "У Вас нет добавленных достижений!"
 

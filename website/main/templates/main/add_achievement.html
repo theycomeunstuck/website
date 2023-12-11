@@ -109,7 +109,8 @@
 </div>
         <div class="form-group" id="scanarea">
             <label for="scan">Загрузить скан:</label>
-            <input type="file" id="scan" name="scan" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.gif,.zip,.rar,.7z,.bmp,.ppt,.pptx" required>
+            <input type="file" id="scan" name="scan" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.gif,.zip,.rar,.7z,.bmp,.ppt,.pptx" onchange="checkFileSize(this)" required>
+            <small style="color: grey;">Максимальный размер файла - 2MB</small>
         </div>
 
 

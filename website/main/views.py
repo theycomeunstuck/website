@@ -55,32 +55,30 @@ def authorization(request):
 
 # profile page
 def profile(request):
-    # print("59 profile def | views.py")
     data = {
         'title': 'Профиль'
     }
     name_button, button_pressed = "", False
 
-    # if request.COOKIES == '{}':
     if does_user_auth(request) == "auth":
         return redirect('auth')
     for line in request.POST:
         if "button" in line:
             button_pressed = True
-            name_button = line
-    #todo: что такое button pressed?
     #todo: прооверка на учителя. если учитель, то ему другую страницу рендерить.
     #todo: переименовать profile.html в user_profile.html | потом сделать типо teacher_user_profile, но назвать получше
 
-    if not button_pressed:
-        localId = request.COOKIES['user_localId']
-        data['value_name'], data['value_surname'], data['value_letter'], data['value_class'], data[
-            'value_countAchievements'] = LoginUserForm().fill_fields(localId)
-
-    else:
+    if button_pressed: #если пользователь отправил пост запрос редирект на другую страницу
         profile_buttons_handler(request)
+    else:
+        localId = request.COOKIES['user_localId']
+        data = db.child('users').child(localId).child('profile').get().val()
+        user_type = data['type']
 
-    return render(request, "main/profile.html", data)  # , data)
+        if user_type == "user":
+            data['value_name'], data['value_surname'], data['value_letter'], data['value_class'], data[
+                'value_countAchievements'] = LoginUserForm().user_fill_fields(localId)
+            return render(request, "main/profile.html", data)  # , data)
 
 
 def profile_buttons_handler(request):
@@ -99,7 +97,7 @@ def profile_buttons_handler(request):
 
 # add_achievement page
 def add_achievement(request):
-    #todo: анимация загрузки (кружок как видео грузится), пока файл не заupload`идтся
+    #todo: анимация загрузки (кружок как видео грузится), пока файл не заupload`идтся. возможно есть где-то готовое решение во втором тг
     data = {'title':'Добавление достижения'}
     if does_user_auth(request) == "auth":
         return redirect('auth')
@@ -120,7 +118,7 @@ def list_achievements(request):
     if does_user_auth(request) == "auth":
         return redirect('auth')
 
-    #todo: ну сделай блять симпатично css
+    #todo: ну сделай симпатично css
     data = {'title': 'Список достижений', 'achievements': get_list_achievements(request)}
     return render(request, "main/list_achievements.html", data)
 
@@ -199,6 +197,11 @@ def logout(request):
 
 # todo: часть учителя
 # todo: часть админа
+# todo: /от флуда/ название достижения не может состоять только из цифр (add_achievement, edit_achievement)
 # todo: /дизайн интерфейса/ сделать красивый выбор в make_report (smthing like this https://codepen.io/maggiben/pen/BapEGv)
+# todo: /интерфейс/ warn message появляется сверху по центру, а не справа снизу (возможно только для маленьких устройств)
 # todo: /интерфейс/ добавить новые workType (виды работ). вот типо олимпиада не точка будущего, а похожее по названию, там же не решение задач, а как-то по другому/бизнес предложение (?)
+# todo: /интерфейс/ возможно в "сформиовать отчёт" стоит также сделать галочку на дату "не важно", что равно любой дате
 # todo: /безопасность/ шифровать куки и каждый раз расшифровывать
+# todo: /от флуда/ не более 5 пост запросов в 2 секунды.
+# todo: edit-achievement. если нажать "изменить достижение" без загруженного файла в "изменить скан", то выскакивает алёрт всё круто
